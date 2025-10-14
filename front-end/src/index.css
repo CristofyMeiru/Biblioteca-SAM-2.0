@@ -112,6 +112,7 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    border-radius: 4px !important;
   }
   body {
     @apply bg-background text-foreground;

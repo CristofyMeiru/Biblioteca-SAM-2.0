@@ -8,62 +8,112 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as publicSignUpRouteImport } from './routes/(public)/sign-up'
-import { Route as privateHomeRouteImport } from './routes/(private)/home'
-import { Route as publicSignInIndexRouteImport } from './routes/(public)/sign-in/index'
+import { Route as rootRouteImport } from './pages/__root'
+import { Route as privateRouteRouteImport } from './pages/(private)/route'
+import { Route as publicSignUpRouteImport } from './pages/(public)/sign-up'
+import { Route as publicSignInIndexRouteImport } from './pages/(public)/sign-in/index'
+import { Route as privateHomeIndexRouteImport } from './pages/(private)/home/index'
+import { Route as privateBookLoansIndexRouteImport } from './pages/(private)/book-loans/index'
+import { Route as privateBookLoansNewIndexRouteImport } from './pages/(private)/book-loans/new/index'
 
+const privateRouteRoute = privateRouteRouteImport.update({
+  id: '/(private)',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const publicSignUpRoute = publicSignUpRouteImport.update({
   id: '/(public)/sign-up',
   path: '/sign-up',
   getParentRoute: () => rootRouteImport,
 } as any)
-const privateHomeRoute = privateHomeRouteImport.update({
-  id: '/(private)/home',
-  path: '/home',
+const publicSignInIndexRoute = publicSignInIndexRouteImport.update({
+  id: '/(public)/sign-in/',
+  path: '/sign-in/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const publicSignInIndexRoute = publicSignInIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => publicSignInRoute,
+const privateHomeIndexRoute = privateHomeIndexRouteImport.update({
+  id: '/home/',
+  path: '/home/',
+  getParentRoute: () => privateRouteRoute,
 } as any)
+const privateBookLoansIndexRoute = privateBookLoansIndexRouteImport.update({
+  id: '/book-loans/',
+  path: '/book-loans/',
+  getParentRoute: () => privateRouteRoute,
+} as any)
+const privateBookLoansNewIndexRoute =
+  privateBookLoansNewIndexRouteImport.update({
+    id: '/book-loans/new/',
+    path: '/book-loans/new/',
+    getParentRoute: () => privateRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/home': typeof privateHomeRoute
+  '/': typeof privateRouteRouteWithChildren
   '/sign-up': typeof publicSignUpRoute
-  '/sign-in/': typeof publicSignInIndexRoute
+  '/book-loans': typeof privateBookLoansIndexRoute
+  '/home': typeof privateHomeIndexRoute
+  '/sign-in': typeof publicSignInIndexRoute
+  '/book-loans/new': typeof privateBookLoansNewIndexRoute
 }
 export interface FileRoutesByTo {
-  '/home': typeof privateHomeRoute
+  '/': typeof privateRouteRouteWithChildren
   '/sign-up': typeof publicSignUpRoute
+  '/book-loans': typeof privateBookLoansIndexRoute
+  '/home': typeof privateHomeIndexRoute
   '/sign-in': typeof publicSignInIndexRoute
+  '/book-loans/new': typeof privateBookLoansNewIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/(private)/home': typeof privateHomeRoute
+  '/(private)': typeof privateRouteRouteWithChildren
   '/(public)/sign-up': typeof publicSignUpRoute
+  '/(private)/book-loans/': typeof privateBookLoansIndexRoute
+  '/(private)/home/': typeof privateHomeIndexRoute
   '/(public)/sign-in/': typeof publicSignInIndexRoute
+  '/(private)/book-loans/new/': typeof privateBookLoansNewIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/home' | '/sign-up' | '/sign-in/'
+  fullPaths:
+    | '/'
+    | '/sign-up'
+    | '/book-loans'
+    | '/home'
+    | '/sign-in'
+    | '/book-loans/new'
   fileRoutesByTo: FileRoutesByTo
-  to: '/home' | '/sign-up' | '/sign-in'
+  to:
+    | '/'
+    | '/sign-up'
+    | '/book-loans'
+    | '/home'
+    | '/sign-in'
+    | '/book-loans/new'
   id:
     | '__root__'
-    | '/(private)/home'
+    | '/(private)'
     | '/(public)/sign-up'
+    | '/(private)/book-loans/'
+    | '/(private)/home/'
     | '/(public)/sign-in/'
+    | '/(private)/book-loans/new/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  privateHomeRoute: typeof privateHomeRoute
+  privateRouteRoute: typeof privateRouteRouteWithChildren
   publicSignUpRoute: typeof publicSignUpRoute
+  publicSignInIndexRoute: typeof publicSignInIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/(private)': {
+      id: '/(private)'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof privateRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(public)/sign-up': {
       id: '/(public)/sign-up'
       path: '/sign-up'
@@ -71,26 +121,57 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof publicSignUpRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(private)/home': {
-      id: '/(private)/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof privateHomeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/(public)/sign-in/': {
       id: '/(public)/sign-in/'
-      path: '/'
-      fullPath: '/sign-in/'
+      path: '/sign-in'
+      fullPath: '/sign-in'
       preLoaderRoute: typeof publicSignInIndexRouteImport
-      parentRoute: typeof publicSignInRoute
+      parentRoute: typeof rootRouteImport
+    }
+    '/(private)/home/': {
+      id: '/(private)/home/'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof privateHomeIndexRouteImport
+      parentRoute: typeof privateRouteRoute
+    }
+    '/(private)/book-loans/': {
+      id: '/(private)/book-loans/'
+      path: '/book-loans'
+      fullPath: '/book-loans'
+      preLoaderRoute: typeof privateBookLoansIndexRouteImport
+      parentRoute: typeof privateRouteRoute
+    }
+    '/(private)/book-loans/new/': {
+      id: '/(private)/book-loans/new/'
+      path: '/book-loans/new'
+      fullPath: '/book-loans/new'
+      preLoaderRoute: typeof privateBookLoansNewIndexRouteImport
+      parentRoute: typeof privateRouteRoute
     }
   }
 }
 
+interface privateRouteRouteChildren {
+  privateBookLoansIndexRoute: typeof privateBookLoansIndexRoute
+  privateHomeIndexRoute: typeof privateHomeIndexRoute
+  privateBookLoansNewIndexRoute: typeof privateBookLoansNewIndexRoute
+}
+
+const privateRouteRouteChildren: privateRouteRouteChildren = {
+  privateBookLoansIndexRoute: privateBookLoansIndexRoute,
+  privateHomeIndexRoute: privateHomeIndexRoute,
+  privateBookLoansNewIndexRoute: privateBookLoansNewIndexRoute,
+}
+
+const privateRouteRouteWithChildren = privateRouteRoute._addFileChildren(
+  privateRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  privateHomeRoute: privateHomeRoute,
+  privateRouteRoute: privateRouteRouteWithChildren,
   publicSignUpRoute: publicSignUpRoute,
+  publicSignInIndexRoute: publicSignInIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
