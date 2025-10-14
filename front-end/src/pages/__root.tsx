@@ -9,7 +9,7 @@ const queryClient = new QueryClient();
 export const RootLayout = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <div className=" bg-neutral-100 dark:bg-neutral-900 ">
+      <div className=" w-full min-h-screen dark:bg-neutral-900 ">
         <Outlet />
         <Toaster />
         <TanStackRouterDevtools />

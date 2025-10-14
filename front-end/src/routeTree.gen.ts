@@ -10,14 +10,20 @@
 
 import { Route as rootRouteImport } from './pages/__root'
 import { Route as privateRouteRouteImport } from './pages/(private)/route'
+import { Route as IndexRouteImport } from './pages/index'
 import { Route as publicSignUpRouteImport } from './pages/(public)/sign-up'
 import { Route as publicSignInIndexRouteImport } from './pages/(public)/sign-in/index'
-import { Route as privateHomeIndexRouteImport } from './pages/(private)/home/index'
+import { Route as privateDashboardIndexRouteImport } from './pages/(private)/dashboard/index'
 import { Route as privateBookLoansIndexRouteImport } from './pages/(private)/book-loans/index'
 import { Route as privateBookLoansNewIndexRouteImport } from './pages/(private)/book-loans/new/index'
 
 const privateRouteRoute = privateRouteRouteImport.update({
   id: '/(private)',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const publicSignUpRoute = publicSignUpRouteImport.update({
@@ -30,9 +36,9 @@ const publicSignInIndexRoute = publicSignInIndexRouteImport.update({
   path: '/sign-in/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const privateHomeIndexRoute = privateHomeIndexRouteImport.update({
-  id: '/home/',
-  path: '/home/',
+const privateDashboardIndexRoute = privateDashboardIndexRouteImport.update({
+  id: '/dashboard/',
+  path: '/dashboard/',
   getParentRoute: () => privateRouteRoute,
 } as any)
 const privateBookLoansIndexRoute = privateBookLoansIndexRouteImport.update({
@@ -51,7 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof privateRouteRouteWithChildren
   '/sign-up': typeof publicSignUpRoute
   '/book-loans': typeof privateBookLoansIndexRoute
-  '/home': typeof privateHomeIndexRoute
+  '/dashboard': typeof privateDashboardIndexRoute
   '/sign-in': typeof publicSignInIndexRoute
   '/book-loans/new': typeof privateBookLoansNewIndexRoute
 }
@@ -59,16 +65,17 @@ export interface FileRoutesByTo {
   '/': typeof privateRouteRouteWithChildren
   '/sign-up': typeof publicSignUpRoute
   '/book-loans': typeof privateBookLoansIndexRoute
-  '/home': typeof privateHomeIndexRoute
+  '/dashboard': typeof privateDashboardIndexRoute
   '/sign-in': typeof publicSignInIndexRoute
   '/book-loans/new': typeof privateBookLoansNewIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/(private)': typeof privateRouteRouteWithChildren
   '/(public)/sign-up': typeof publicSignUpRoute
   '/(private)/book-loans/': typeof privateBookLoansIndexRoute
-  '/(private)/home/': typeof privateHomeIndexRoute
+  '/(private)/dashboard/': typeof privateDashboardIndexRoute
   '/(public)/sign-in/': typeof publicSignInIndexRoute
   '/(private)/book-loans/new/': typeof privateBookLoansNewIndexRoute
 }
@@ -78,7 +85,7 @@ export interface FileRouteTypes {
     | '/'
     | '/sign-up'
     | '/book-loans'
-    | '/home'
+    | '/dashboard'
     | '/sign-in'
     | '/book-loans/new'
   fileRoutesByTo: FileRoutesByTo
@@ -86,20 +93,22 @@ export interface FileRouteTypes {
     | '/'
     | '/sign-up'
     | '/book-loans'
-    | '/home'
+    | '/dashboard'
     | '/sign-in'
     | '/book-loans/new'
   id:
     | '__root__'
+    | '/'
     | '/(private)'
     | '/(public)/sign-up'
     | '/(private)/book-loans/'
-    | '/(private)/home/'
+    | '/(private)/dashboard/'
     | '/(public)/sign-in/'
     | '/(private)/book-loans/new/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   privateRouteRoute: typeof privateRouteRouteWithChildren
   publicSignUpRoute: typeof publicSignUpRoute
   publicSignInIndexRoute: typeof publicSignInIndexRoute
@@ -112,6 +121,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof privateRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(public)/sign-up': {
@@ -128,11 +144,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof publicSignInIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(private)/home/': {
-      id: '/(private)/home/'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof privateHomeIndexRouteImport
+    '/(private)/dashboard/': {
+      id: '/(private)/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof privateDashboardIndexRouteImport
       parentRoute: typeof privateRouteRoute
     }
     '/(private)/book-loans/': {
@@ -154,13 +170,13 @@ declare module '@tanstack/react-router' {
 
 interface privateRouteRouteChildren {
   privateBookLoansIndexRoute: typeof privateBookLoansIndexRoute
-  privateHomeIndexRoute: typeof privateHomeIndexRoute
+  privateDashboardIndexRoute: typeof privateDashboardIndexRoute
   privateBookLoansNewIndexRoute: typeof privateBookLoansNewIndexRoute
 }
 
 const privateRouteRouteChildren: privateRouteRouteChildren = {
   privateBookLoansIndexRoute: privateBookLoansIndexRoute,
-  privateHomeIndexRoute: privateHomeIndexRoute,
+  privateDashboardIndexRoute: privateDashboardIndexRoute,
   privateBookLoansNewIndexRoute: privateBookLoansNewIndexRoute,
 }
 
@@ -169,6 +185,7 @@ const privateRouteRouteWithChildren = privateRouteRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   privateRouteRoute: privateRouteRouteWithChildren,
   publicSignUpRoute: publicSignUpRoute,
   publicSignInIndexRoute: publicSignInIndexRoute,

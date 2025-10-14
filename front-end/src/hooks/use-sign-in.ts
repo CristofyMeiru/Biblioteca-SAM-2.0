@@ -1,5 +1,5 @@
 import { authClient } from "@/lib/auth-client";
-import type { AuthUser } from "@/pages/(public)/sign-in/-schema";
+import type { AuthUser } from "@/schemas/auth.schema";
 import { useMutation } from "@tanstack/react-query";
 import {} from "better-auth";
 import { toast } from "sonner";
@@ -19,4 +19,4 @@ const useSignIn = () =>
     },
   });
 
-  export default useSignIn
+export default useSignIn;

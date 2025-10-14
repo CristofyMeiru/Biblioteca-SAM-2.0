@@ -3,12 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
-import useSignIn from "@/hooks/useSignIn";
+import useSignIn from "@/hooks/use-sign-in";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { authUserSchema, type AuthUser } from "./-schema";
+import { authUserSchema, type AuthUser } from "../../../schemas/auth.schema";
 
 export const Route = createFileRoute("/(public)/sign-in/")({
   component: RouteComponent,
@@ -31,11 +31,15 @@ function RouteComponent() {
   return (
     <main className=" flex w-full h-screen  ">
       <section className="  h-full flex flex-col flex-1 justify-center items-center ">
+        <div className=" flex flex-col items-center mb-10">
+          <img src="/livro.png" alt="logo.png" className=" h-20 " />
+          <h1 className=" text-3xl font-semibold text-green-900 ">Biblioteca-SAM</h1>
+        </div>
         <Form {...authForm}>
           <form onSubmit={authForm.handleSubmit((data) => mutateAuthUser(data))} className=" space-y-5 w-2/5 ">
             <div className=" text-center ">
-              <h1 className=" text-2xl font-semibold ">Entrar</h1>
-              <span className=" text-sm text-neutral-600 ">Informe seu email educacional e sua senha para entrar.</span>
+              <h1 className=" text-2xl font-semibold ">Bem-vindo de volta! </h1>
+              <span className=" text-sm text-green-700 ">Entre na sua conta para gerenciar a biblioteca.</span>
             </div>
             <FormField
               control={authForm.control}
@@ -44,7 +48,7 @@ function RouteComponent() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="seu.email@prof.ce.gov.br" {...field} />
+                    <Input className=" h-11 " placeholder="seu.email@prof.ce.gov.br" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -62,9 +66,14 @@ function RouteComponent() {
                     </span>
                   </div>
                   <FormControl>
-                    <Input type={showPass ? "text" : "password"} placeholder="Informe sua senha" {...field} />
+                    <Input
+                      className=" h-11 "
+                      type={showPass ? "text" : "password"}
+                      placeholder="Informe sua senha"
+                      {...field}
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage  />
                 </FormItem>
               )}
             />
