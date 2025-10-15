@@ -14,7 +14,9 @@ import { Route as IndexRouteImport } from './pages/index'
 import { Route as publicSignUpRouteImport } from './pages/(public)/sign-up'
 import { Route as publicSignInIndexRouteImport } from './pages/(public)/sign-in/index'
 import { Route as privateDashboardIndexRouteImport } from './pages/(private)/dashboard/index'
+import { Route as privateBooksIndexRouteImport } from './pages/(private)/books/index'
 import { Route as privateBookLoansIndexRouteImport } from './pages/(private)/book-loans/index'
+import { Route as privateBooksNewRouteImport } from './pages/(private)/books/new'
 import { Route as privateBookLoansNewIndexRouteImport } from './pages/(private)/book-loans/new/index'
 
 const privateRouteRoute = privateRouteRouteImport.update({
@@ -41,9 +43,19 @@ const privateDashboardIndexRoute = privateDashboardIndexRouteImport.update({
   path: '/dashboard/',
   getParentRoute: () => privateRouteRoute,
 } as any)
+const privateBooksIndexRoute = privateBooksIndexRouteImport.update({
+  id: '/books/',
+  path: '/books/',
+  getParentRoute: () => privateRouteRoute,
+} as any)
 const privateBookLoansIndexRoute = privateBookLoansIndexRouteImport.update({
   id: '/book-loans/',
   path: '/book-loans/',
+  getParentRoute: () => privateRouteRoute,
+} as any)
+const privateBooksNewRoute = privateBooksNewRouteImport.update({
+  id: '/books/new',
+  path: '/books/new',
   getParentRoute: () => privateRouteRoute,
 } as any)
 const privateBookLoansNewIndexRoute =
@@ -56,7 +68,9 @@ const privateBookLoansNewIndexRoute =
 export interface FileRoutesByFullPath {
   '/': typeof privateRouteRouteWithChildren
   '/sign-up': typeof publicSignUpRoute
+  '/books/new': typeof privateBooksNewRoute
   '/book-loans': typeof privateBookLoansIndexRoute
+  '/books': typeof privateBooksIndexRoute
   '/dashboard': typeof privateDashboardIndexRoute
   '/sign-in': typeof publicSignInIndexRoute
   '/book-loans/new': typeof privateBookLoansNewIndexRoute
@@ -64,7 +78,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof privateRouteRouteWithChildren
   '/sign-up': typeof publicSignUpRoute
+  '/books/new': typeof privateBooksNewRoute
   '/book-loans': typeof privateBookLoansIndexRoute
+  '/books': typeof privateBooksIndexRoute
   '/dashboard': typeof privateDashboardIndexRoute
   '/sign-in': typeof publicSignInIndexRoute
   '/book-loans/new': typeof privateBookLoansNewIndexRoute
@@ -74,7 +90,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/(private)': typeof privateRouteRouteWithChildren
   '/(public)/sign-up': typeof publicSignUpRoute
+  '/(private)/books/new': typeof privateBooksNewRoute
   '/(private)/book-loans/': typeof privateBookLoansIndexRoute
+  '/(private)/books/': typeof privateBooksIndexRoute
   '/(private)/dashboard/': typeof privateDashboardIndexRoute
   '/(public)/sign-in/': typeof publicSignInIndexRoute
   '/(private)/book-loans/new/': typeof privateBookLoansNewIndexRoute
@@ -84,7 +102,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/sign-up'
+    | '/books/new'
     | '/book-loans'
+    | '/books'
     | '/dashboard'
     | '/sign-in'
     | '/book-loans/new'
@@ -92,7 +112,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/sign-up'
+    | '/books/new'
     | '/book-loans'
+    | '/books'
     | '/dashboard'
     | '/sign-in'
     | '/book-loans/new'
@@ -101,7 +123,9 @@ export interface FileRouteTypes {
     | '/'
     | '/(private)'
     | '/(public)/sign-up'
+    | '/(private)/books/new'
     | '/(private)/book-loans/'
+    | '/(private)/books/'
     | '/(private)/dashboard/'
     | '/(public)/sign-in/'
     | '/(private)/book-loans/new/'
@@ -151,11 +175,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof privateDashboardIndexRouteImport
       parentRoute: typeof privateRouteRoute
     }
+    '/(private)/books/': {
+      id: '/(private)/books/'
+      path: '/books'
+      fullPath: '/books'
+      preLoaderRoute: typeof privateBooksIndexRouteImport
+      parentRoute: typeof privateRouteRoute
+    }
     '/(private)/book-loans/': {
       id: '/(private)/book-loans/'
       path: '/book-loans'
       fullPath: '/book-loans'
       preLoaderRoute: typeof privateBookLoansIndexRouteImport
+      parentRoute: typeof privateRouteRoute
+    }
+    '/(private)/books/new': {
+      id: '/(private)/books/new'
+      path: '/books/new'
+      fullPath: '/books/new'
+      preLoaderRoute: typeof privateBooksNewRouteImport
       parentRoute: typeof privateRouteRoute
     }
     '/(private)/book-loans/new/': {
@@ -169,13 +207,17 @@ declare module '@tanstack/react-router' {
 }
 
 interface privateRouteRouteChildren {
+  privateBooksNewRoute: typeof privateBooksNewRoute
   privateBookLoansIndexRoute: typeof privateBookLoansIndexRoute
+  privateBooksIndexRoute: typeof privateBooksIndexRoute
   privateDashboardIndexRoute: typeof privateDashboardIndexRoute
   privateBookLoansNewIndexRoute: typeof privateBookLoansNewIndexRoute
 }
 
 const privateRouteRouteChildren: privateRouteRouteChildren = {
+  privateBooksNewRoute: privateBooksNewRoute,
   privateBookLoansIndexRoute: privateBookLoansIndexRoute,
+  privateBooksIndexRoute: privateBooksIndexRoute,
   privateDashboardIndexRoute: privateDashboardIndexRoute,
   privateBookLoansNewIndexRoute: privateBookLoansNewIndexRoute,
 }

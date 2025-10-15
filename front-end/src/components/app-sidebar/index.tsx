@@ -26,6 +26,11 @@ const items: SidebarItem[] = [
     url: "/book-loans",
     icon: "handshake",
   },
+  {
+    title: "Livros",
+    url: "/books",
+    icon: "book"
+  }
 ] as const;
 
 export function AppSidebar() {

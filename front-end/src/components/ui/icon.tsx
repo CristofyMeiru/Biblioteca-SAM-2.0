@@ -52,6 +52,10 @@ export const icons = {
   checkCircle: lucide.CheckCircle,
   loader: lucide.Loader,
   loader2: lucide.Loader2,
+  book: lucide.Book,
+  users: lucide.Users,
+  undo2: lucide.Undo2,
+  fileText: lucide.FileText
 } as const;
 
 export type IconName = keyof typeof icons;
@@ -62,7 +66,7 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
   color?: string;
 }
 
-export default function Icon({ name, size = 2, ...props }: IconProps) {
+export default function Icon({ name, size = 18, ...props }: IconProps) {
   const LucideIcon = icons[name] ?? lucide.FileQuestion;
 
   return <LucideIcon size={size} {...props} />;

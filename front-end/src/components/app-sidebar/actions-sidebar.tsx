@@ -16,6 +16,11 @@ const items: SidebarItem[] = [
     icon: "plus",
     url: "/book-loans/new",
   },
+  {
+    title: "Novo livro",
+    icon: "plus",
+    url: "/books/new"
+  }
 ];
 
 export default function ActionsSidebar() {
