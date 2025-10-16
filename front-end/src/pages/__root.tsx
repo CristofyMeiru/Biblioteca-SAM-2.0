@@ -20,4 +20,5 @@ export const RootLayout = () => (
 
 export const Route = createRootRoute({
   component: RootLayout,
+  notFoundComponent: () => <>Página não encontrada.</>,
 });

@@ -3,6 +3,7 @@ import fastify, { type FastifyInstance } from "fastify";
 import fastifyBetterAuth from "fastify-better-auth";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { env } from "./config/env";
+import { globalRoutes } from "./global.routes";
 import { auth } from "./lib/auth";
 import swaggerPlugin from "./plugins/swagger-plugin";
 
@@ -33,6 +34,8 @@ class Server {
       });
 
       this.app.register(swaggerPlugin);
+
+      this.app.register(globalRoutes);
 
       this.app.register(fastifyBetterAuth, {
         auth: auth,
