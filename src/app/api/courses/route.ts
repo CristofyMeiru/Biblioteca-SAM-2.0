@@ -1,7 +1,21 @@
-import { errorHandler } from "@/common/resolvers/error-handler";
-import { NextRequest, NextResponse } from "next/server";
-import * as pipe from "./courses.pipe";
-import * as coursesService from "./courses.service";
+import { errorHandler } from '@/common/resolvers/error-handler';
+import { NextRequest, NextResponse } from 'next/server';
+import * as pipe from './courses.pipe';
+import * as coursesService from './courses.service';
+
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+
+    const parsedValues = pipe.getCoursesQueryStringSchema.parse(Object.fromEntries(searchParams.entries()));
+
+    const result = await coursesService.get(parsedValues);
+
+    return NextResponse.json(result, { status: 200 });
+  } catch (error) {
+    return errorHandler(error);
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -11,7 +25,7 @@ export async function POST(req: NextRequest) {
 
     const result = await coursesService.create(parsedBody);
 
-    return NextResponse.json({ message: "Curso adicionado com sucesso.", course: result }, { status: 201 });
+    return NextResponse.json({ message: 'Curso adicionado com sucesso.', course: result }, { status: 201 });
   } catch (error) {
     return errorHandler(error);
   }

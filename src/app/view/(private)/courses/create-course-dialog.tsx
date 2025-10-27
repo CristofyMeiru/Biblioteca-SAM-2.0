@@ -93,7 +93,7 @@ export default function CreateCourseDialog() {
                     <Input placeholder="Exemplo: DS, ADM, MASSO, EDIFICA..." {...field} />
                   </FormControl>
                   <FormDescription>
-                    É necessário que sejá exatamente a mesma abreviação contido no Qr Code dos aluno deste curso.
+                    É necessário que sejá exatamente a mesma abreviação contido no Qr Code dos alunos deste curso.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
