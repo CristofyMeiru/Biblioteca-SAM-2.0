@@ -1,34 +1,25 @@
 "use client";
 
+import { BookSelectDTO } from "@/app/api/books/books.dto";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
 import { Item, ItemActions, ItemHeader, ItemTitle } from "@/components/ui/item";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import apiClient from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
 import { DashboardTable } from "./table";
-import { unavailableBooksColumns, type Book } from "./unavailable-books-table-columns";
-
-const books: Book[] = [
-  {
-    title: "A Revolução dos Bichos",
-    author: "George Orwell",
-    category: "Ficção política",
-    loans: 12,
-  },
-  {
-    title: "O Hobbit",
-    author: "J.R.R. Tolkien",
-    category: "Fantasia",
-    loans: 8,
-  },
-  {
-    title: "O Sol é para Todos",
-    author: "Harper Lee",
-    category: "Drama",
-    loans: 5,
-  },
-];
+import { unavailableBooksColumns } from "./unavailable-books-table-columns";
 
 export function UnavailableBooksTable() {
+  const { data: unavailableBooksData, isLoading: loadingUnavailableBooks } = useQuery<BookSelectDTO[]>({
+    queryKey: ["books", "unavailable"],
+    queryFn: async () => {
+      const response = await apiClient.get<BookSelectDTO[]>("/books?status=unavailable");
+
+      return response.data;
+    },
+  });
+
   return (
     <Item className=" flex-1 p-4 pb-5 shadow-md">
       <ItemHeader>
@@ -49,7 +40,11 @@ export function UnavailableBooksTable() {
           </Tooltip>
         </ItemActions>
       </ItemHeader>
-      <DashboardTable columns={unavailableBooksColumns} data={books} />
+      <DashboardTable
+        columns={unavailableBooksColumns}
+        data={unavailableBooksData ?? []}
+        isLoading={loadingUnavailableBooks}
+      />
     </Item>
   );
 }

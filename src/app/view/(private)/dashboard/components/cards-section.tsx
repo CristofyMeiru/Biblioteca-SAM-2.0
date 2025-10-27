@@ -23,9 +23,9 @@ export default function CardStatsSection() {
   const { data: unavailableBooksData, isLoading: loadingUnavailableBooks } = useQuery<BookSelectDTO[]>({
     queryKey: ["books", "unavailable"],
     queryFn: async () => {
-      const response = await apiClient.get<BookSelectDTO[]>("/books?status=unavailable")
+      const response = await apiClient.get<BookSelectDTO[]>("/books?status=unavailable");
 
-      return response.data
+      return response.data;
     },
   });
 
@@ -75,7 +75,13 @@ export default function CardStatsSection() {
               </ItemActions>
             </ItemHeader>
             <ItemContent>
-              <span className="font-medium text-2xl">23</span>
+              {loadingUnavailableBooks ? (
+                <Skeleton className=" h-7 w-25 " />
+              ) : unavailableBooksData ? (
+                <span className="font-medium text-2xl">{unavailableBooksData?.length}</span>
+              ) : (
+                <>N/A</>
+              )}
               <span className="text-primary">+3% desde o mês passado</span>
             </ItemContent>
           </Item>

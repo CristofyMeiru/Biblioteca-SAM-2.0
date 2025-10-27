@@ -34,7 +34,12 @@ const items: SidebarItem[] = [
     title: "Livros",
     url: "/view/books",
     icon: "book",
-  }
+  },
+  {
+    title: "Cursos",
+    url: "/view/courses",
+    icon: "graduationCap",
+  },
 ] as const;
 
 export function AppSidebar() {

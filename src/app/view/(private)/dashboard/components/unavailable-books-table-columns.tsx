@@ -1,32 +1,36 @@
+import { BookSelectDTO } from "@/app/api/books/books.dto";
 import { Kbd } from "@/components/ui/kbd";
 import type { ColumnDef } from "@tanstack/react-table";
+import { capitalCase } from "change-case";
 
-export type Book = {
-  title: string;
-  author: string;
-  category: string;
-  loans: number;
-};
-
-export const unavailableBooksColumns: ColumnDef<Book>[] = [
+export const unavailableBooksColumns: ColumnDef<BookSelectDTO>[] = [
   {
     accessorKey: "title",
     header: "Título",
+    cell: ({ renderValue }) => <span>{capitalCase(String(renderValue()))}</span>,
   },
   {
-    accessorKey: "author",
+    accessorKey: "authorName",
     header: "Autor",
+    cell: ({ renderValue }) => <span>{capitalCase(String(renderValue()))}</span>,
   },
   {
-    accessorKey: "category",
-    header: "Categoria",
+    accessorKey: "genre",
+    header: "Gênero",
+    cell: ({ renderValue }) => (
+      <Kbd className=" bg-primary/10 text-green-900 text-[14px] ">{capitalCase(String(renderValue()))}</Kbd>
+    ),
   },
   {
-    accessorKey: "loans",
-    header: "Reservas",
+    accessorKey: "loanedQuantity",
+    header: ()=> <div className=" w-full text-center " >Emprestimos</div>,
     cell: ({ row }) => {
-      const value = row.getValue("loans") as number;
-      return <Kbd className=" bg-destructive/10 text-destructive ">{value}</Kbd>;
+      const value = row.getValue("loanedQuantity") as number;
+      return (
+        <div className=" w-full text-center  ">
+          <Kbd className=" bg-destructive/10 text-destructive ">{value}</Kbd>
+        </div>
+      );
     },
   },
 ];

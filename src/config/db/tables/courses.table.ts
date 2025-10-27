@@ -5,5 +5,6 @@ export const gradeLevelEnum = pgEnum("grade_level_enum", ["1", "2", "3"]);
 export const coursesTable = pgTable("courses", {
   id: uuid("id").notNull().primaryKey(),
   name: varchar("name", { length: 50 }).notNull(),
+  slug: varchar("slug", { length: 20 }).notNull(),
   gradeLevel: gradeLevelEnum("grade_level").notNull(),
 });

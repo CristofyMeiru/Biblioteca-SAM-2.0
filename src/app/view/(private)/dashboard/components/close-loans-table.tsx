@@ -7,7 +7,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { closeLoansTableColumns, type CloseLoans } from "./close-loans-table-columns";
 import { DashboardTable } from "./table";
 
-
 const closeLoans: CloseLoans[] = [
   {
     id: "1",
@@ -51,7 +50,7 @@ export function CloseLoansTable() {
         </ItemActions>
       </ItemHeader>
 
-      <DashboardTable columns={closeLoansTableColumns} data={closeLoans} />
+      <DashboardTable columns={closeLoansTableColumns} data={closeLoans} isLoading={false} />
     </Item>
   );
 }

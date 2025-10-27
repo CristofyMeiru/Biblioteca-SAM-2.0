@@ -1,0 +1,10 @@
+
+### Criação de novo curso
+POST http://localhost:3000/api/courses
+Content-Type: application/json
+
+{
+  "name": "Desenvolvimento de Sistemas",
+  "slug": "DS",
+  "gradeLevel": "1"
+}

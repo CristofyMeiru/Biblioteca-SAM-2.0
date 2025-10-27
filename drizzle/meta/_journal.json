@@ -15,6 +15,13 @@
       "when": 1761509110005,
       "tag": "0001_confused_impossible_man",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1761598173668,
+      "tag": "0002_lumpy_blizzard",
+      "breakpoints": true
     }
   ]
 }
