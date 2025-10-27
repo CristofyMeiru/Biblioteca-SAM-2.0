@@ -10,3 +10,4 @@ export type BookSelectDTO = InferSelectModel<typeof booksTable>;
 export type CreateBookDTO = z.infer<typeof createBookSchema>;
 
 export type GetBooksDTO = z.infer<typeof getBooksSchemaQuery>;
+

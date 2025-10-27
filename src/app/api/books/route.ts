@@ -6,12 +6,14 @@ import * as booksService from "./books.service";
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const page = searchParams.get("page");
-    const limit = searchParams.get("limit");
 
-    const parsedValues = pipe.getBooksSchemaQuery.parse({ page, limit });
+    const parsedValues = pipe.getBooksSchemaQuery.parse(Object.fromEntries(searchParams.entries()));
 
-    const result = await booksService.get({ page: parsedValues.page, limit: parsedValues.limit });
+    const result = await booksService.get({
+      page: parsedValues.page,
+      limit: parsedValues.limit,
+      status: parsedValues.status,
+    });
 
     return NextResponse.json(result, { status: 200 });
   } catch (error) {

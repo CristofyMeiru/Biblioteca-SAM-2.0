@@ -6,7 +6,15 @@ export async function get(options: GetBooksDTO): Promise<BookSelectDTO[]> {
   try {
     const offset = (options.page - 1) * options.limit;
 
-    const result = await booksRepository.find({}, { limit: options.limit, offset });
+    let result;
+
+    
+    if (options.status == "unavailable") {
+      result = await booksRepository.unavailableBooks();
+    } else {
+
+      result = await booksRepository.find({}, { limit: options.limit, offset });
+    }
 
     return result;
   } catch (error) {
@@ -35,6 +43,16 @@ export async function create(data: CreateBookDTO) {
     const resultCreation = await booksRepository.create(newBook);
 
     return resultCreation;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function count(): Promise<number> {
+  try {
+    const result = await booksRepository.count({});
+
+    return result;
   } catch (error) {
     throw error;
   }

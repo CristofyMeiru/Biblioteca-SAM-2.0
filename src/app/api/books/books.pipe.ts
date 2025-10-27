@@ -13,6 +13,7 @@ export const AquisitionMethodEnum = z.enum(
 export const getBooksSchemaQuery = z.object({
   limit: z.coerce.number("Limite precisa ser um número").max(500, "Limite máximo de 500.").optional().default(50),
   page: z.coerce.number("Página precisa ser um número.").min(1).optional().default(1),
+  status: z.enum(["unavailable"]).optional(),
 });
 
 export const createBookSchema = z.object({
@@ -41,4 +42,3 @@ export const createBookSchema = z.object({
   tombo: z.string().max(60, "O campo Tombo deve ter no máximo 60 caracteres.").optional(),
   edition: z.string().max(50, "A Edição deve ter no máximo 50 caracteres.").optional(),
 });
-

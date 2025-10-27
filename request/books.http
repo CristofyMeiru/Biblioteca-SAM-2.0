@@ -25,6 +25,8 @@ Content-Type: application/json
 GET http://localhost:3000/api/books?limit={{limit}}&page={{page}}
 Content-Type: application/json
 
+### Rota de busca de livros indisponiveis
+GET http://localhost:3000/api/books?status=unavailable
 
 ### Busca de livro por id
 @book_id = c049b4e1-b4d6-4394-966d-c613a0daa9df
@@ -40,3 +42,7 @@ Content-Type: application/json
 
 ### Deletar livro
 DELETE http://localhost:3000/api/books/{{book_id}}
+
+
+### Contagem de livros
+GET http://localhost:3000/api/books/counts
