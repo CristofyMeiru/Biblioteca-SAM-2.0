@@ -1,0 +1,42 @@
+
+### Rota de criação de livros
+POST http://localhost:3000/api/books
+Content-Type: application/json
+
+{
+  "title": "Introdução à Programaçã",
+  "authorName": "João Silva",
+  "publisher": "Editora Técnica",
+  "quantity": "10",
+  "materialType": "Livro",
+  "aquisitionMethod": "compra",
+  "pagesQuantity": "320",
+  "loanedQuantity": "2",
+  "genre": "tecnologia",
+  "isbn": "978-85-12345-67-8",
+  "cddOrCdu": "004.1",
+  "tombo": "12345",
+  "edition": "2ª edição"
+}
+
+### Rota de busca simples de livros
+@limit = 50
+@page = 1
+GET http://localhost:3000/api/books?limit={{limit}}&page={{page}}
+Content-Type: application/json
+
+
+### Busca de livro por id
+@book_id = c049b4e1-b4d6-4394-966d-c613a0daa9df
+GET http://localhost:3000/api/books/{{book_id}}
+
+### Atualizar livro
+PATCH http://localhost:3000/api/books/{{book_id}}
+Content-Type: application/json
+
+{
+  "title": "Introdução"
+}
+
+### Deletar livro
+DELETE http://localhost:3000/api/books/{{book_id}}

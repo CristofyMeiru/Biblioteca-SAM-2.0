@@ -1,18 +1,17 @@
-'use client'
+"use client";
 
 import Icon from "@/components/ui/icon";
 import { Item, ItemActions, ItemContent, ItemGroup, ItemHeader, ItemTitle } from "@/components/ui/item";
-import { useState } from "react";
 
 export default function CardStatsSection() {
-  const [itemGroupClassname] = useState<string>(" flex-col md:flex-row gap-4 ");
-  const [itemClassname] = useState<string>(" shadow-sm w-full lg:w-1/2");
+  const itemGroupClassname: string = " flex-col md:flex-row gap-4 ";
+  const itemClassname = " shadow-sm w-full lg:w-1/2 ";
 
   return (
     <div>
       <ItemGroup className="flex-col lg:flex-row w-full  gap-4">
         <ItemGroup className={itemGroupClassname}>
-          <Item className={itemClassname} variant="outline">
+          <Item className={itemClassname}>
             <ItemHeader className="text-green-800 flex justify-between items-center">
               <ItemTitle>Total de livros</ItemTitle>
               <ItemActions>
@@ -25,7 +24,7 @@ export default function CardStatsSection() {
             </ItemContent>
           </Item>
 
-          <Item className={itemClassname} variant="outline">
+          <Item className={itemClassname}>
             <ItemHeader className="text-green-800 flex justify-between items-center">
               <ItemTitle>Empréstimos Ativos</ItemTitle>
               <ItemActions>
@@ -40,7 +39,7 @@ export default function CardStatsSection() {
         </ItemGroup>
 
         <ItemGroup className={itemGroupClassname}>
-          <Item className={itemClassname} variant="outline">
+          <Item className={itemClassname}>
             <ItemHeader className="text-green-800 flex justify-between items-center">
               <ItemTitle>Livros em falta</ItemTitle>
               <ItemActions>
@@ -53,7 +52,7 @@ export default function CardStatsSection() {
             </ItemContent>
           </Item>
 
-          <Item className={itemClassname} variant="outline">
+          <Item className={itemClassname}>
             <ItemHeader className="text-green-800 flex justify-between items-center">
               <ItemTitle>Taxa de devolução</ItemTitle>
               <ItemActions>

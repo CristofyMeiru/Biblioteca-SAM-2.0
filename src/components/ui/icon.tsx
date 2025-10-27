@@ -56,6 +56,8 @@ export const icons = {
   users: lucide.Users,
   undo2: lucide.Undo2,
   fileText: lucide.FileText,
+  qrCode: lucide.QrCode,
+  download: lucide.Download
 } as const;
 
 export type IconName = keyof typeof icons;

@@ -30,7 +30,7 @@ const books: Book[] = [
 
 export function UnavailableBooksTable() {
   return (
-    <Item variant={"outline"} className=" flex-1 p-4 pb-5 shadow-md">
+    <Item className=" flex-1 p-4 pb-5 shadow-md">
       <ItemHeader>
         <ItemTitle>
           <Icon name="alertCircle" className=" text-destructive size-7 " />

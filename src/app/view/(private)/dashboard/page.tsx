@@ -15,7 +15,7 @@ export default function DashboardPage() {
         <span className=" text-green-700 mb-5 ">Visão geral do gerenciamento da biblioteca</span>
         <CardStatsSection />
         <ItemGroup className=" flex flex-col  mt-10 gap-4 ">
-          <CloseLoansTable/>
+          <CloseLoansTable />
           <UnavailableBooksTable />
         </ItemGroup>
       </div>

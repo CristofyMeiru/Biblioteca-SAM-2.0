@@ -29,7 +29,7 @@ export default function LogInPage() {
     <main className=" flex w-full h-screen  ">
       <section className="  h-full flex flex-col flex-1 justify-center items-center ">
         <div className=" flex flex-col items-center mb-10">
-          <img src="/livro.png" alt="logo.png" className=" h-20 " />
+          <Image src="/logo.png" width={100} height={130} alt="/logo.png" className=" size-20 " />
           <h1 className=" text-3xl font-semibold text-green-900 ">Biblioteca-SAM</h1>
         </div>
         <Form {...authForm}>
@@ -85,7 +85,13 @@ export default function LogInPage() {
         </div>
       </section>
       <aside className=" flex-1 ">
-        <Image className=" w-full h-full " src={"/books-background.png"} width={1080} height={1720} alt="books-background" />
+        <Image
+          className=" w-full h-full "
+          src={"/books-background.png"}
+          width={1080}
+          height={1720}
+          alt="books-background"
+        />
       </aside>
     </main>
   );
