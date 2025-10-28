@@ -12,3 +12,15 @@ export const createCourseSchema = z.object({
   slug: z.string().max(20, 'Máximo de 20 caracteres.'),
   gradeLevel: gradeLevelEnum,
 });
+
+export const paramsCourseSchema = z.object({
+  id: z.uuid('Informe um UUID válido.'),
+});
+
+export const updateCourseSchema = z
+  .object({
+    name: z.string().max(255, 'Máximo de 255 caracteres.').toLowerCase(),
+    slug: z.string().max(20, 'Máximo de 20 caracteres.'),
+    gradeLevel: gradeLevelEnum,
+  })
+  .partial();

@@ -7,7 +7,7 @@ type BookParams = {
   id: string;
 };
 
-export async function GET(req: NextRequest, { params }: { params: BookParams }) {
+export async function GET(_req: NextRequest, { params }: { params: BookParams }) {
   try {
     const parsedParams = pipe.bookParamsSchema.parse(params);
 
@@ -19,7 +19,7 @@ export async function GET(req: NextRequest, { params }: { params: BookParams }) 
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: BookParams }) {
+export async function DELETE(_req: NextRequest, { params }: { params: BookParams }) {
   try {
     const parsedParams = pipe.bookParamsSchema.parse(params);
 

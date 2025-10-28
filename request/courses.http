@@ -1,4 +1,7 @@
 
+@course_id = 001a29f3-e1e1-4df5-9859-951824a968c5
+
+
 ### Criação de novo curso
 POST http://localhost:3000/api/courses
 Content-Type: application/json
@@ -8,3 +11,9 @@ Content-Type: application/json
   "slug": "DS",
   "gradeLevel": "1"
 }
+
+### Busca simples de livros
+GET http://localhost:3000/api/courses
+
+### Busca unitária de livro por ID
+GET http://localhost:3000/api/courses/{{course_id}}

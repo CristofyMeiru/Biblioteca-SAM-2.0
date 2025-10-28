@@ -1,8 +1,8 @@
+import { AppError } from '@/common/resolvers/app-error';
 import { db } from '@/config/db/db-client';
 import { coursesTable } from '@/config/db/tables/courses.table';
 import { and, eq } from 'drizzle-orm';
-import { BookSelectDTO } from '../books/books.dto';
-import { CourseInsertDTO, CourseSelectDTO } from './courses.dto';
+import { CourseInsertDTO, CourseSelectDTO, CourseUpdateDTO } from './courses.dto';
 
 export async function create(data: CourseInsertDTO): Promise<CourseSelectDTO> {
   try {
@@ -74,5 +74,30 @@ export async function findOne(fields: Partial<CourseSelectDTO>): Promise<CourseS
   } catch (error) {
     if (error instanceof Error) throw error;
     throw new Error('Não foi possivel efetuar a busca.');
+  }
+}
+
+export async function deleteById(id: string): Promise<CourseSelectDTO> {
+  try {
+    const [result] = await db.delete(coursesTable).where(eq(coursesTable.id, id)).returning();
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function updateById(id: string, fields: Partial<CourseUpdateDTO>): Promise<CourseSelectDTO> {
+  try {
+    const [updateResult] = await db
+      .update(coursesTable)
+      .set({ ...fields })
+      .where(eq(coursesTable.id, id))
+      .returning();
+
+    return updateResult;
+  } catch (error) {
+    if (error instanceof AppError) throw error;
+    throw new Error('Não foi possível atualizar os campos');
   }
 }
