@@ -27,7 +27,7 @@ describe("create-book", () => {
   });
 
   it("should invalidate some fields", () => {
-    const bookToInvalidation = createBookSchema.safeParse({ ...validBook, loanedQuantity: undefined });
+    const bookToInvalidation = createBookSchema.safeParse({ ...validBook, title: undefined });
 
     expect(bookToInvalidation.success).toBeFalsy();
     expect(bookToInvalidation.data).toBeUndefined();

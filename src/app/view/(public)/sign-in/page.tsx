@@ -1,29 +1,50 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/spinner";
-import useSignIn from "@/hooks/use-sign-in";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { authUserSchema, type AuthUser } from "./auth.schema";
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/spinner';
+import { authClient } from '@/lib/auth-client';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { BetterAuthError, User } from 'better-auth';
+import Image from 'next/image';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { authUserSchema, type AuthUser } from './auth.schema';
+import { useRouter } from 'next/navigation';
 
 export default function LogInPage() {
   const [showPass, setShowPass] = useState<boolean>();
+  const router = useRouter()
 
   const authForm = useForm<AuthUser>({
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
-    mode: "onBlur",
+    mode: 'onBlur',
     resolver: zodResolver(authUserSchema),
   });
 
-  const { mutate: mutateAuthUser, isPending: pendingAuthentication } = useSignIn();
+  const { mutate: mutateAuthUser, isPending: pendingAuthentication } = useMutation<User, BetterAuthError, AuthUser>({
+    mutationKey: ['auth-user'],
+    mutationFn: async (signInData: AuthUser) => {
+      const { data, error } = await authClient.signIn.email({ ...signInData });
+
+      if (error) throw new Error('Não foi possível realizar a autenticação.');
+
+      return data.user;
+    },
+    onSuccess: (data) => {
+      router.replace("/view/dashboard")
+      toast.success(`Bem vindo(a), novamente ${data.name}`);
+    },
+    onError: () => {
+      toast.error('Não foi possível realizar a autenticação.');
+    },
+  });
 
   return (
     <main className=" flex w-full h-screen  ">
@@ -59,13 +80,13 @@ export default function LogInPage() {
                   <div className=" flex justify-between ">
                     <FormLabel>Senha</FormLabel>
                     <span onClick={() => setShowPass(!showPass)} className=" text-sm cursor-pointer ">
-                      {showPass ? "Ocultar senha" : "Mostrar senha"}
+                      {showPass ? 'Ocultar senha' : 'Mostrar senha'}
                     </span>
                   </div>
                   <FormControl>
                     <Input
                       className=" h-11 "
-                      type={showPass ? "text" : "password"}
+                      type={showPass ? 'text' : 'password'}
                       placeholder="Informe sua senha"
                       {...field}
                     />
@@ -74,12 +95,12 @@ export default function LogInPage() {
                 </FormItem>
               )}
             />
-            <Button className=" w-full ">{pendingAuthentication ? <Spinner /> : "Entrar"}</Button>
+            <Button className=" w-full ">{pendingAuthentication ? <Spinner /> : 'Entrar'}</Button>
           </form>
         </Form>
         <div className=" flex items-baseline space-x-1 ">
-          <span className=" text-sm mt-4 text-neutral-600 ">Esqueceu a senha?</span>{" "}
-          <Button className=" !p-0 h-fit  " variant={"link"}>
+          <span className=" text-sm mt-4 text-neutral-600 ">Esqueceu a senha?</span>{' '}
+          <Button className=" !p-0 h-fit  " variant={'link'}>
             Clique aqui
           </Button>
         </div>
@@ -87,7 +108,7 @@ export default function LogInPage() {
       <aside className=" flex-1 ">
         <Image
           className=" w-full h-full "
-          src={"/books-background.png"}
+          src={'/books-background.png'}
           width={1080}
           height={1720}
           alt="books-background"

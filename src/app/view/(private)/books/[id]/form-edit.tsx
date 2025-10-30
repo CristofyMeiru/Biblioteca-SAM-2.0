@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { EditBookDTO } from "@/app/api/books/[id]/book.dto";
-import { BookSelectDTO } from "@/app/api/books/books.dto";
-import { Button } from "@/components/ui/button";
-import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import Icon from "@/components/ui/icon";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Spinner } from "@/components/ui/spinner";
-import apiClient from "@/lib/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { capitalCase } from "change-case";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { aquisitionMethods, materialTypes } from "../components/create-book-dialog";
-import { BookFormField } from "./form-field";
+import { EditBookDTO } from '@/app/api/books/[id]/book.dto';
+import { BookSelectDTO } from '@/app/api/books/books.dto';
+import { Button } from '@/components/ui/button';
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
+import Icon from '@/components/ui/icon';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Spinner } from '@/components/ui/spinner';
+import apiClient from '@/lib/api';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
+import { capitalCase } from 'change-case';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { aquisitionMethods, materialTypes } from '../components/create-book-dialog';
+import { BookFormField } from './form-field';
 
 export default function BookFormEdit({ bookData }: { bookData: BookSelectDTO }) {
   const queryClient = useQueryClient();
@@ -28,12 +28,12 @@ export default function BookFormEdit({ bookData }: { bookData: BookSelectDTO }) 
       authorName: capitalCase(bookData.authorName),
       genre: capitalCase(bookData.genre),
       publisher: capitalCase(bookData.publisher),
-      isbn: bookData.isbn ?? "Não informado",
-      edition: capitalCase(bookData.edition ?? "não informado"),
-      materialType: capitalCase(bookData.materialType ?? "não informado") as any,
-      aquisitionMethod: capitalCase(bookData.aquisitionMethod ?? "") as any,
-      cddOrCdu: bookData.cddOrCdu ?? "Não informado",
-      tombo: bookData.tombo ?? "Não informado",
+      isbn: bookData.isbn ?? 'Não informado',
+      edition: capitalCase(bookData.edition ?? 'não informado'),
+      materialType: capitalCase(bookData.materialType ?? 'não informado') as any,
+      aquisitionMethod: capitalCase(bookData.aquisitionMethod ?? '') as any,
+      cddOrCdu: bookData.cddOrCdu ?? 'Não informado',
+      tombo: bookData.tombo ?? 'Não informado',
       pagesQuantity: bookData.pagesQuantity ?? 0,
       quantity: bookData.quantity,
     },
@@ -44,7 +44,7 @@ export default function BookFormEdit({ bookData }: { bookData: BookSelectDTO }) 
     AxiosError<{ message: string }>,
     EditBookDTO
   >({
-    mutationKey: ["update-book", bookData.id],
+    mutationKey: ['update-book', bookData.id],
     mutationFn: async (data: EditBookDTO) => {
       const payload = Object.fromEntries(
         Object.entries(data).filter(
@@ -52,17 +52,19 @@ export default function BookFormEdit({ bookData }: { bookData: BookSelectDTO }) 
         )
       );
 
+      console.log(payload)
+      
       const response = await apiClient.patch(`/books/${bookData.id}`, payload);
       return response.data;
     },
     onSuccess: () => {
-      toast.success("Livro atualizado com sucesso.");
-      queryClient.invalidateQueries({ queryKey: ["book", bookData.id] });
+      toast.success('Livro atualizado com sucesso.');
+      queryClient.invalidateQueries({ queryKey: ['book', bookData.id] });
       handleEditState();
     },
     onError: (error) => {
-      toast.error("Não foi possível atualizar os dados.", {
-        description: `${error instanceof AxiosError ? error.response?.data.message : "Erro interno inesperado"} `,
+      toast.error('Não foi possível atualizar os dados.', {
+        description: `${error instanceof AxiosError ? error.response?.data.message : 'Erro interno inesperado'} `,
       });
     },
   });
@@ -72,11 +74,13 @@ export default function BookFormEdit({ bookData }: { bookData: BookSelectDTO }) 
     if (!inEdit) formEditBook.reset({ ...bookData } as any);
   }
 
+  
+  
   return (
     <Card className="flex-3 row-span-2 col-span-5">
       <CardHeader>
         <div className="flex items-center space-x-2">
-          <Button size={"icon-lg"} className="disabled:opacity-100" disabled>
+          <Button size={'icon-lg'} className="disabled:opacity-100" disabled>
             <Icon name="fileText" />
           </Button>
           <div>
@@ -86,7 +90,7 @@ export default function BookFormEdit({ bookData }: { bookData: BookSelectDTO }) 
         </div>
 
         <CardAction className=" space-x-2 ">
-          <Button variant={inEdit ? "outline" : "default"} onClick={() => handleEditState()}>
+          <Button variant={inEdit ? 'outline' : 'default'} onClick={() => handleEditState()}>
             {inEdit ? (
               <>
                 <Icon name="x" /> Cancelar
@@ -117,7 +121,7 @@ export default function BookFormEdit({ bookData }: { bookData: BookSelectDTO }) 
             onSubmit={formEditBook.handleSubmit((data) => mutateUpdateBook(data))}
             className="flex w-full items-center"
           >
-            <section className="flex flex-1 flex-col justify-around space-y-4">
+            <fieldset className="flex flex-1 flex-col justify-around space-y-4" disabled={pendingUpdateBook}>
               {/* Título e Autor */}
 
               <section className=" flex-1 flex items-center space-x-4 ">
@@ -222,7 +226,7 @@ export default function BookFormEdit({ bookData }: { bookData: BookSelectDTO }) 
                       )}
                     />
                   ) : (
-                    <span>{capitalCase(bookData.materialType ?? "não informado")}</span>
+                    <span>{capitalCase(bookData.materialType ?? 'não informado')}</span>
                   )}
                 </div>
 
@@ -252,7 +256,7 @@ export default function BookFormEdit({ bookData }: { bookData: BookSelectDTO }) 
                       )}
                     />
                   ) : (
-                    <span>{capitalCase(bookData.aquisitionMethod ?? "não informado")}</span>
+                    <span>{capitalCase(bookData.aquisitionMethod ?? 'não informado')}</span>
                   )}
                 </div>
               </section>
@@ -306,7 +310,7 @@ export default function BookFormEdit({ bookData }: { bookData: BookSelectDTO }) 
                   </div>
                 </section>
               )}
-            </section>
+            </fieldset>
           </form>
         </Form>
       </CardContent>

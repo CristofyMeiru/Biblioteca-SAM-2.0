@@ -1,9 +1,10 @@
-"use client";
+'use client';
 
-import Icon from "@/components/ui/icon";
+import Icon from '@/components/ui/icon';
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -12,33 +13,34 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar";
-import type { SidebarItem } from "@/types/Item-sidebar";
+} from '@/components/ui/sidebar';
+import type { SidebarItem } from '@/types/Item-sidebar';
 
-import Image from "next/image";
-import Link from "next/link";
-import ActionsSidebar from "./actions-sidebar";
+import Image from 'next/image';
+import Link from 'next/link';
+import ActionsSidebar from './actions-sidebar';
+import SignOutDialog from './sign-out-dialog';
 
 const items: SidebarItem[] = [
   {
-    title: "Painel de controle",
-    url: "/view/dashboard",
-    icon: "layoutDashboard",
+    title: 'Painel de controle',
+    url: '/view/dashboard',
+    icon: 'layoutDashboard',
   },
   {
-    title: "Empréstimos",
-    url: "/view/book-loans",
-    icon: "handshake",
+    title: 'Empréstimos',
+    url: '/view/book-loans',
+    icon: 'handshake',
   },
   {
-    title: "Livros",
-    url: "/view/books",
-    icon: "book",
+    title: 'Livros',
+    url: '/view/books',
+    icon: 'book',
   },
   {
-    title: "Cursos",
-    url: "/view/courses",
-    icon: "graduationCap",
+    title: 'Cursos',
+    url: '/view/courses',
+    icon: 'graduationCap',
   },
 ] as const;
 
@@ -49,13 +51,13 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" className=" outline ">
       <SidebarHeader>
         <SidebarMenu>
-          <SidebarMenuItem className={`flex items-center ${!open && "justify-center"} cursor-default space-x-2`}>
+          <SidebarMenuItem className={`flex items-center ${!open && 'justify-center'} cursor-default space-x-2`}>
             <Image
               src="/logo.png"
               width={300}
               height={360}
               alt="logo.png"
-              className={`${open ? "size-10" : "size-5"} `}
+              className={`${open ? 'size-10' : 'size-5'} `}
             />
             {open && (
               <h1 className=" text-green-900 font-semibold text-lg text-nowrap overflow-auto ">Biblioteca-SAM</h1>
@@ -83,6 +85,9 @@ export function AppSidebar() {
         </SidebarGroup>
         <ActionsSidebar />
       </SidebarContent>
+      <SidebarFooter>
+        <SignOutDialog />
+      </SidebarFooter>
     </Sidebar>
   );
 }

@@ -1,14 +1,14 @@
-import { AppError, ErrorType } from "@/common/resolvers/app-error";
-import { BookSelectDTO } from "../books.dto";
-import * as booksRepository from "../books.repository";
-import { BookParamsDTO, EditBookDTO } from "./book.dto";
+import { AppError, ErrorType } from '@/common/resolvers/app-error';
+import { BookSelectDTO } from '../books.dto';
+import * as booksRepository from '../books.repository';
+import { BookParamsDTO, EditBookDTO } from './book.dto';
 
 export async function getUnique(data: BookParamsDTO): Promise<BookSelectDTO> {
   try {
     const bookExists = await booksRepository.findOne({ id: data.id });
 
     if (!bookExists) {
-      throw new AppError("Livro não encontrado.", ErrorType.NOT_FOUND);
+      throw new AppError('Livro não encontrado.', ErrorType.NOT_FOUND);
     }
 
     return bookExists;
@@ -19,6 +19,19 @@ export async function getUnique(data: BookParamsDTO): Promise<BookSelectDTO> {
 
 export async function updateById(id: string, fields: EditBookDTO): Promise<BookSelectDTO> {
   try {
+    const bookExists = await booksRepository.findOne({ id });
+
+    if (!bookExists) {
+      throw new AppError('Livro não encontrado.', ErrorType.NOT_FOUND);
+    }
+
+    if (fields.quantity && fields.quantity < bookExists.loanedQuantity) {
+      throw new AppError(
+        'Quantidade de unidades não pode ser menor que a quantidade de emprestimos ativos.',
+        ErrorType.BAD_REQUEST
+      );
+    }
+
     const result = await booksRepository.updateById(id, fields);
 
     return result;
@@ -32,7 +45,7 @@ export async function deleteById(id: string): Promise<BookSelectDTO> {
     const result = await booksRepository.deleteByid(id);
 
     if (!result) {
-      throw new AppError("Livro não encontrado.", ErrorType.NOT_FOUND);
+      throw new AppError('Livro não encontrado.', ErrorType.NOT_FOUND);
     }
 
     return result;

@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { BookSelectDTO } from "@/app/api/books/books.dto";
-import { Button } from "@/components/ui/button";
-import Icon from "@/components/ui/icon";
-import { Item, ItemActions, ItemHeader, ItemTitle } from "@/components/ui/item";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import apiClient from "@/lib/api";
-import { useQuery } from "@tanstack/react-query";
-import { DashboardTable } from "./table";
-import { unavailableBooksColumns } from "./unavailable-books-table-columns";
+import { BookSelectDTO } from '@/app/api/books/books.dto';
+import { buttonVariants } from '@/components/ui/button';
+import Icon from '@/components/ui/icon';
+import { Item, ItemActions, ItemHeader, ItemTitle } from '@/components/ui/item';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import apiClient from '@/lib/api';
+import { useQuery } from '@tanstack/react-query';
+import { DashboardTable } from './table';
+import { unavailableBooksColumns } from './unavailable-books-table-columns';
 
 export function UnavailableBooksTable() {
   const { data: unavailableBooksData, isLoading: loadingUnavailableBooks } = useQuery<BookSelectDTO[]>({
-    queryKey: ["books", "unavailable"],
+    queryKey: ['books', 'unavailable'],
     queryFn: async () => {
-      const response = await apiClient.get<BookSelectDTO[]>("/books?status=unavailable");
+      const response = await apiClient.get<BookSelectDTO[]>('/books?status=unavailable');
 
       return response.data;
     },
@@ -29,10 +29,8 @@ export function UnavailableBooksTable() {
         </ItemTitle>
         <ItemActions>
           <Tooltip>
-            <TooltipTrigger>
-              <Button size={"icon"} variant={"outline"}>
-                <Icon name="fileText" />
-              </Button>
+            <TooltipTrigger className={buttonVariants({ variant: 'outline' })}>
+              <Icon name="fileText" />
             </TooltipTrigger>
             <TooltipContent>
               <span>Gerar relatório</span>
