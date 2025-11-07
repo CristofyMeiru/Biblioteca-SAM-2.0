@@ -1,9 +1,9 @@
 import { db } from '@/config/db/db-client';
 import * as schemas from '@/config/db/tables/auth.table';
-import { betterAuth } from 'better-auth';
+import { APIError, betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { admin as adminPluggin } from 'better-auth/plugins';
-import { ac, super_admin, user } from './auth/permissions';
+import { admin as adminPluggin, createAuthMiddleware } from 'better-auth/plugins';
+import { ac, admin, user } from './auth/permissions';
 import { SSR_ENV } from './env-server';
 
 const authServer = betterAuth({
@@ -15,15 +15,26 @@ const authServer = betterAuth({
     adminPluggin({
       ac,
       roles: {
-        super_admin,
+        admin,
         user,
       },
+      adminRoles: ['admin'],
     }),
   ],
   secret: SSR_ENV.JWT_SECRET,
   session: {
     disableSessionRefresh: true,
+    expiresIn: 60 * 60 * 8, // 8 horas
   },
+  hooks: {
+    before: createAuthMiddleware(async (ctx) => {
+      if (ctx.path == '/sign-up/email') {
+        throw new APIError('FORBIDDEN', {
+          message: 'Unauthorized',
+        });
+      }
+    }),
+  }
 });
 
 export default authServer;

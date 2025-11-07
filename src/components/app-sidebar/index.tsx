@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/sidebar';
 import type { SidebarItem } from '@/types/Item-sidebar';
 
+import { useAuth } from '@/providers/auth-provider';
 import Image from 'next/image';
 import Link from 'next/link';
 import ActionsSidebar from './actions-sidebar';
@@ -42,10 +43,16 @@ const items: SidebarItem[] = [
     url: '/view/courses',
     icon: 'graduationCap',
   },
+  {
+    title: 'Frequência',
+    url: '/view/attendance',
+    icon: 'userCheck',
+  },
 ] as const;
 
 export function AppSidebar() {
   const { open } = useSidebar();
+  const { session } = useAuth();
 
   return (
     <Sidebar collapsible="icon" className=" outline ">
@@ -60,7 +67,7 @@ export function AppSidebar() {
               className={`${open ? 'size-10' : 'size-5'} `}
             />
             {open && (
-              <h1 className=" text-green-900 font-semibold text-lg text-nowrap overflow-auto ">Biblioteca-SAM</h1>
+              <h1 className=" text-green-900 font-semibold text-lg text-nowrap overflow-auto ">Biblioteca SAM</h1>
             )}
           </SidebarMenuItem>
         </SidebarMenu>
@@ -70,6 +77,16 @@ export function AppSidebar() {
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
+              {session?.user.role == 'admin' && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton tooltip={'Painel administrativo'} asChild>
+                    <Link href={'/view/admin'}>
+                      <Icon name={'userCog'} />
+                      <span>Painel administrativo</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton tooltip={item.title} asChild>

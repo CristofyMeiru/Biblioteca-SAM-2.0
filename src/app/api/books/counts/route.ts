@@ -1,8 +1,8 @@
-import { errorHandler } from "@/common/resolvers/error-handler";
-import { NextRequest, NextResponse } from "next/server";
-import * as booksService from "../books.service";
+import { errorHandler } from '@/common/resolvers/error-handler';
+import { NextResponse } from 'next/server';
+import * as booksService from '../books.service';
 
-export async function GET(_req: NextRequest) {
+export async function GET() {
   try {
     const result = await booksService.count();
 

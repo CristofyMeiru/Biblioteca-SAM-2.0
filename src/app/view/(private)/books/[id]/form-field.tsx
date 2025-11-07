@@ -1,9 +1,8 @@
-import { EditBookDTO } from "@/app/api/books/[id]/book.dto";
-import { BookSelectDTO } from "@/app/api/books/books.dto";
-import { FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { capitalCase } from "change-case";
-import { Control } from "react-hook-form";
+import { EditBookDTO } from '@/app/api/books/[id]/book.dto';
+import { FormControl, FormField, FormItem } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { capitalCase } from 'change-case';
+import { Control } from 'react-hook-form';
 
 export function BookFormField({
   label,
@@ -34,7 +33,7 @@ export function BookFormField({
           )}
         />
       ) : (
-        <span className="font-medium">{value ? capitalCase(value) : "Não informado"}</span>
+        <span className="font-medium">{value ? capitalCase(value) : 'Não informado'}</span>
       )}
     </div>
   );

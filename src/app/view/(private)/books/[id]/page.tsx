@@ -16,23 +16,6 @@ import DeleteAlertDialog from "./delete-alert-dialog";
 import BookFormEdit from "./form-edit";
 import QuantityStatsCard from "./quantity-stats-card";
 
-const disponibilyInfo = [
-  {
-    value: 27,
-    label: "Total",
-    valueStyle: "",
-  },
-  {
-    value: 8,
-    label: "Alugados",
-    valueStyle: "text-destructive",
-  },
-  {
-    value: 19,
-    label: "Disponível",
-    valueStyle: "text-primary",
-  },
-];
 
 export default function BookPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = React.use(params);

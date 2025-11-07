@@ -1,5 +1,5 @@
-import * as lucide from "lucide-react";
-import React from "react";
+import * as lucide from 'lucide-react';
+import React from 'react';
 
 export const icons = {
   home: lucide.Home,
@@ -57,7 +57,9 @@ export const icons = {
   undo2: lucide.Undo2,
   fileText: lucide.FileText,
   qrCode: lucide.QrCode,
-  download: lucide.Download
+  download: lucide.Download,
+  save: lucide.Save,
+  userCheck: lucide.UserCheck
 } as const;
 
 export type IconName = keyof typeof icons;

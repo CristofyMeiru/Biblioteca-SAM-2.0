@@ -32,8 +32,14 @@ export default function SignOutDialog() {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className={buttonVariants({ variant: 'destructive' })}>
-        <Icon name="doorOpen" /> Sair
+      <AlertDialogTrigger className={`${buttonVariants({ variant: 'destructive' })} w-full`}>
+        {pendingSignOut ? (
+          <Spinner />
+        ) : (
+          <>
+            <Icon name="doorOpen" /> Sair
+          </>
+        )}
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

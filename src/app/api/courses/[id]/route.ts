@@ -3,11 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import * as pipe from '../courses.pipe';
 import * as coursesService from '../courses.service';
 
-interface CoursePathParams {
-  id: string;
-}
 
-export async function GET(_req: NextRequest, context: { params: CoursePathParams }) {
+export async function GET(_req: NextRequest, context: any) {
   try {
     const params = await Promise.resolve(context.params);
     const parsedParams = await pipe.paramsCourseSchema.parseAsync(params);
@@ -20,7 +17,7 @@ export async function GET(_req: NextRequest, context: { params: CoursePathParams
   }
 }
 
-export async function PATCH(req: NextRequest, context: { params: CoursePathParams }) {
+export async function PATCH(req: NextRequest, context: any) {
   try {
     const body = await req.json();
     const params = await Promise.resolve(context.params);
@@ -36,7 +33,7 @@ export async function PATCH(req: NextRequest, context: { params: CoursePathParam
   }
 }
 
-export async function DELETE(_req: NextRequest, context: { params: CoursePathParams }) {
+export async function DELETE(_req: NextRequest, context: any) {
   try {
     const params = await Promise.resolve(context.params);
     const parsedParams = await pipe.paramsCourseSchema.parseAsync(params);

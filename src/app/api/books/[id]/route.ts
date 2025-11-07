@@ -3,11 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import * as pipe from './book.pipe';
 import * as bookService from './book.service';
 
-type BookParams = {
-  id: string;
-};
 
-export async function GET(_req: NextRequest, context: { params: BookParams }) {
+export async function GET(_req: NextRequest, context: any) {
   try {
     const params = await Promise.resolve(context.params);
     const parsedParams = pipe.bookParamsSchema.parse(params);
@@ -20,7 +17,7 @@ export async function GET(_req: NextRequest, context: { params: BookParams }) {
   }
 }
 
-export async function DELETE(_req: NextRequest, context: { params: BookParams }) {
+export async function DELETE(_req: NextRequest, context: any) {
   try {
     const params = await Promise.resolve(context.params);
     const parsedParams = pipe.bookParamsSchema.parse(params);
@@ -33,7 +30,7 @@ export async function DELETE(_req: NextRequest, context: { params: BookParams })
   }
 }
 
-export async function PATCH(req: NextRequest, context: { params: BookParams }) {
+export async function PATCH(req: NextRequest, context: any) {
   try {
     const params = await Promise.resolve(context.params);
     const body = await req.json();
