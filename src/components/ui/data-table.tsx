@@ -73,31 +73,34 @@ export function DataTableInputSearch() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const searchString = searchParams.toString();
+  React.useEffect(() => {
+    const currentSearch = searchParams.get('search') ?? '';
+    setValue(currentSearch);
+  }, [searchParams]);
 
   React.useEffect(() => {
     const timeout = setTimeout(() => {
-      const params = new URLSearchParams(searchString);
+      const params = new URLSearchParams(searchParams.toString());
 
       if (!value) {
         params.delete('search');
-
-        router.replace(pathname);
       } else {
         params.set('search', value);
-
-        router.replace(`${pathname}?${params.toString()}`);
       }
 
+      const qs = params.toString();
+      const url = qs ? `${pathname}?${qs}` : pathname;
+
+      router.replace(url);
       router.refresh();
     }, 500);
 
     return () => clearTimeout(timeout);
-  }, [value, pathname, router, searchString]);
+  }, [value, pathname, router, searchParams]);
 
   return (
     <div className="relative w-1/3">
-      <Input placeholder="Pesquisar..." className="pr-12" onChange={(e) => setValue(e.target.value)} />
+      <Input placeholder="Pesquisar..." className="pr-12" onChange={(e) => setValue(e.target.value)} value={value} />
       <Button variant="ghost" size="icon" className="absolute right-0 top-1/2 -translate-y-1/2">
         <Icon name="search" />
       </Button>
@@ -185,7 +188,6 @@ export function DataTableContent() {
 }
 
 const tableSizes: number[] = [10, 15, 20, 25, 30]; // add values here to new size options
-
 export function DataTablePagination() {
   const ctx = React.useContext(dataTableContext);
   if (!ctx) throw new Error('DataTablePagination must be inside <DataTable>');
@@ -205,58 +207,69 @@ export function DataTablePagination() {
   const end = Math.min((pageIndex + 1) * pageSize, total);
 
   function handleChangeSize(value: number | string) {
-    const defaultPaginationValues = table.getState().pagination;
-
     localStorage.setItem(`${name}-page-size`, String(value));
-    table.setPagination({ pageIndex: defaultPaginationValues.pageIndex, pageSize: Number(value) });
+    table.setPagination((prev) => ({
+      ...prev,
+      pageSize: Number(value),
+      pageIndex: 0,
+    }));
   }
 
   React.useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
+    const current = new URLSearchParams(searchParams.toString());
 
-    const page = String(table.getState().pagination.pageIndex + 1);
-    const limit = String(table.getState().pagination.pageSize);
+    const pageFromTable = String(pageIndex + 1);
+    const limitFromTable = String(pageSize);
 
-    const alreadySame = params.get('page') === page && params.get('limit') === limit;
+    let changed = false;
+    if (current.get('page') !== pageFromTable) {
+      current.set('page', pageFromTable);
+      changed = true;
+    }
+    if (current.get('limit') !== limitFromTable) {
+      current.set('limit', limitFromTable);
+      changed = true;
+    }
 
-    if (alreadySame) return;
+    if (!changed) return; 
 
-    params.set('page', page);
-    params.set('limit', limit);
-
-    router.replace(`${pathname}?${params.toString()}`);
-  }, [pageSize, pageIndex, searchParams, pathname, router, table]);
-
+    router.replace(`${pathname}?${current.toString()}`, { scroll: false });
+  }, [pageIndex, pageSize, searchParams, pathname, router]);
   return (
-    <section className=" grid items-center grid-rows-1 grid-cols-3 ">
-      <span className=" col-span-1 text-sm text-muted-foreground ">
+    <section className="grid items-center grid-rows-1 grid-cols-3">
+      <span className="col-span-1 text-sm text-muted-foreground">
         Exibindo {start}-{end} de {total}
       </span>
-      <section className=" flex items-center justify-center col-span-1 space-x-2 ">
-        <Button onClick={() => table.setPageIndex(0)} variant={'outline'} disabled={pageIndex == 0}>
+
+      <section className="flex items-center justify-center col-span-1 space-x-2">
+        <Button onClick={() => table.setPageIndex(0)} variant="outline" disabled={pageIndex == 0}>
           <Icon name="chevronFirst" />
         </Button>
-        <Button onClick={() => table.previousPage()} variant={'outline'} disabled={!table.getCanPreviousPage()}>
+
+        <Button onClick={() => table.previousPage()} variant="outline" disabled={!table.getCanPreviousPage()}>
           <Icon name="chevronLeft" />
         </Button>
-        <Button variant={'outline'}>{pageIndex + 1}</Button>
 
-        <Button onClick={() => table.nextPage()} variant={'outline'} disabled={!table.getCanNextPage()}>
+        <Button variant="outline">{pageIndex + 1}</Button>
+
+        <Button onClick={() => table.setPageIndex(pageIndex + 1)} variant="outline">
           <Icon name="chevronRight" />
         </Button>
-        <Button onClick={() => table.setPageIndex(0)} variant={'outline'} disabled={pageIndex == 0}>
+
+        <Button onClick={() => table.setPageIndex(table.getPageCount?.() - 1)} variant="outline">
           <Icon name="chevronLast" />
         </Button>
       </section>
-      <div className=" col-span-1 flex items-center justify-end ">
-        <span className=" text-sm text-muted-foreground mr-2 ">Tamanho da página</span>
-        <Select onValueChange={handleChangeSize}>
-          <SelectTrigger className=" min-w-20 ">
-            <SelectValue placeholder={table.getState().pagination.pageSize} />
+
+      <div className="col-span-1 flex items-center justify-end">
+        <span className="text-sm text-muted-foreground mr-2">Tamanho da página</span>
+        <Select defaultValue={String(pageSize)} onValueChange={handleChangeSize}>
+          <SelectTrigger className="min-w-20">
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
             {tableSizes.map((size) => (
-              <SelectItem className=" " key={size} value={String(size)}>
+              <SelectItem key={size} value={String(size)}>
                 {size}
               </SelectItem>
             ))}

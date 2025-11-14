@@ -1,7 +1,7 @@
 'use client';
 
 import { CreateBookDTO } from '@/app/api/books/books.dto';
-import { createBookSchema } from '@/app/api/books/books.pipe';
+import { createBookSchema, MaterialTypeEnum } from '@/app/api/books/books.pipe';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -25,8 +25,8 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-export const aquisitionMethods: CreateBookDTO['aquisitionMethod'][] = ['compra', 'doação', 'permuta'];
-export const materialTypes = ['Livro', 'TCC', 'Revista', 'Periódico', 'Outro'];
+export const aquisitionMethods: CreateBookDTO['aquisitionMethod'][] = ['compra', 'doação', 'permuta', 'pnld'];
+export const materialTypes: MaterialTypeEnum[] = ['Livro', 'TCC', 'Revista', 'Periódico', 'Outro', 'livro literatura'];
 
 export default function CreateBookDialog() {
   const queryClient = useQueryClient();

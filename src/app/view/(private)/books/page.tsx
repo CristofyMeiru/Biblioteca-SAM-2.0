@@ -4,12 +4,19 @@ import { BookSelectDTO, CreateBookDTO } from '@/app/api/books/books.dto';
 import { AquisitionMethodEnum, MaterialTypeEnum } from '@/app/api/books/books.pipe';
 import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
-import { DataTable, DataTableContent, DataTableInputSearch, DataTablePagination } from '@/components/ui/data-table';
+import {
+  DataTable,
+  DataTableContent,
+  DataTableHeader,
+  DataTableInputSearch,
+  DataTablePagination,
+} from '@/components/ui/data-table';
 import Icon from '@/components/ui/icon';
 import { Separator } from '@/components/ui/separator';
 import apiClient from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { booksTableColumns } from './components/book-table-columns';
 import CreateBookDialog from './components/create-book-dialog';
 
@@ -31,17 +38,17 @@ export type LivroInfo = {
 export default function BooksPage() {
   const searchParams = useSearchParams();
 
+  const [pagination, setPagination] = useState<{ page: number; limit: number }>({ page: 1, limit: 50 });
+
   const search = searchParams.get('search') ?? null;
-  const page = Number(searchParams.get('page') ?? 1);
-  const limit = Number(searchParams.get('limit') ?? 50);
 
   const { data: booksData, isLoading: loadingBooks } = useQuery<BookSelectDTO[]>({
-    queryKey: ['books', { search, page, limit }],
+    queryKey: ['books', { search }],
     queryFn: async () => {
       const result = await apiClient.get<BookSelectDTO[]>('/books', {
         params: {
-          limit,
-          page,
+          limit: pagination.limit,
+          page: pagination.page,
           search,
         },
       });
@@ -98,6 +105,12 @@ export default function BooksPage() {
     console.log('Falhou:', failInsertCount);
   }
 
+  useEffect(() => {
+    const page = Number(searchParams.get('page') ?? 1);
+    const limit = Number(searchParams.get('limit') ?? 50);
+    setPagination({ page, limit });
+  }, [searchParams]);
+
   return (
     <main className=" p-8 ">
       <section className=" flex justify-between items-center ">
@@ -117,13 +130,15 @@ export default function BooksPage() {
       <Separator className=" my-4 " />
       <section className=" flex flex-col space-y-2">
         <DataTable name="books" columns={booksTableColumns} data={booksData ?? []} isLoading={loadingBooks}>
-          <DataTableInputSearch />
+          <DataTableHeader>
+            <DataTableInputSearch />
+          </DataTableHeader>
           <DataTableContent />
           <DataTablePagination />
         </DataTable>
       </section>
 
-      <Button onClick={adicionaTudo}>Ora do PAU</Button>
+      <Button onClick={adicionaTudo}>Adiciona tudo</Button>
     </main>
   );
 }
