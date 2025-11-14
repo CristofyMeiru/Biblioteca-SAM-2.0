@@ -61,7 +61,7 @@ export default function EditUserDialog({ initialData }: { initialData: InitialDa
   const { mutate: mutateEditUser, isPending: pendingEdituser } = useMutation<UserWithRole, Error | APIError, EditUser>({
     mutationKey: ['edit-user', initialData.id],
     mutationFn: async (data) => {
-      let payload: Partial<EditUser> = {};
+      const payload: Partial<EditUser> = {};
 
       if (initialData.name != data.name) payload.name = data.name;
       if (initialData.email != data.email) payload.email = data.email;
@@ -131,7 +131,7 @@ export default function EditUserDialog({ initialData }: { initialData: InitialDa
     const paramIsOpen = searchParams.get('edit-dialog');
     const paramId = searchParams.get('id');
     setIsOpen(paramIsOpen === 'open' && paramId === initialData.id);
-  }, [searchParams]);
+  }, [searchParams, initialData.id]);
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>

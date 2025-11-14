@@ -1,8 +1,7 @@
 import { errorHandler } from '@/common/resolvers/error-handler';
 import { NextRequest, NextResponse } from 'next/server';
-import * as pipe from './book.pipe';
-import * as bookService from './book.service';
-
+import * as pipe from '../books.pipe';
+import * as bookService from '../books.service';
 
 export async function GET(_req: NextRequest, context: any) {
   try {

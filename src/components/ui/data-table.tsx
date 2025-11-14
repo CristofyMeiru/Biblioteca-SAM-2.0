@@ -43,7 +43,6 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const defaultPageSize: number | string = localStorage.getItem(`${name}-page-size`) ?? Number(15);
 
-
   const [pagination, setPagination] = React.useState<PaginationState>(
     paginationOptions ?? { pageIndex: 0, pageSize: Number(defaultPageSize) }
   );
@@ -74,28 +73,32 @@ export function DataTableInputSearch() {
   const pathname = usePathname();
   const router = useRouter();
 
+  const searchString = searchParams.toString();
+
   React.useEffect(() => {
-    const t = setTimeout(() => {
-      const params = new URLSearchParams(searchParams.toString());
+    const timeout = setTimeout(() => {
+      const params = new URLSearchParams(searchString);
 
       if (!value) {
         params.delete('search');
-        router.replace(`${pathname}`);
+
+        router.replace(pathname);
       } else {
         params.set('search', value);
+
         router.replace(`${pathname}?${params.toString()}`);
       }
 
       router.refresh();
     }, 500);
 
-    return () => clearTimeout(t);
-  }, [value]);
+    return () => clearTimeout(timeout);
+  }, [value, pathname, router, searchString]);
 
   return (
     <div className="relative w-1/3">
       <Input placeholder="Pesquisar..." className="pr-12" onChange={(e) => setValue(e.target.value)} />
-      <Button variant={'ghost'} size={'icon'} className="absolute right-0 top-1/2 -translate-y-1/2">
+      <Button variant="ghost" size="icon" className="absolute right-0 top-1/2 -translate-y-1/2">
         <Icon name="search" />
       </Button>
     </div>
@@ -181,13 +184,9 @@ export function DataTableContent() {
   );
 }
 
-interface DataTablePaginationProps {
-  variant?: 'simple' | 'default';
-}
-
 const tableSizes: number[] = [10, 15, 20, 25, 30]; // add values here to new size options
 
-export function DataTablePagination({ variant }: DataTablePaginationProps) {
+export function DataTablePagination() {
   const ctx = React.useContext(dataTableContext);
   if (!ctx) throw new Error('DataTablePagination must be inside <DataTable>');
 
@@ -212,18 +211,21 @@ export function DataTablePagination({ variant }: DataTablePaginationProps) {
     table.setPagination({ pageIndex: defaultPaginationValues.pageIndex, pageSize: Number(value) });
   }
 
-  if (variant == 'simple') {
-    return <div>não feito ainda</div>;
-  }
-
   React.useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
 
-    params.set('page', String(table.getState().pagination.pageIndex + 1));
-    params.set('limit', String(table.getState().pagination.pageSize));
+    const page = String(table.getState().pagination.pageIndex + 1);
+    const limit = String(table.getState().pagination.pageSize);
+
+    const alreadySame = params.get('page') === page && params.get('limit') === limit;
+
+    if (alreadySame) return;
+
+    params.set('page', page);
+    params.set('limit', limit);
 
     router.replace(`${pathname}?${params.toString()}`);
-  }, [table.getState().pagination]);
+  }, [pageSize, pageIndex, searchParams, pathname, router, table]);
 
   return (
     <section className=" grid items-center grid-rows-1 grid-cols-3 ">

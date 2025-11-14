@@ -1,6 +1,7 @@
 'use client';
 
 import { BookSelectDTO, CreateBookDTO } from '@/app/api/books/books.dto';
+import { AquisitionMethodEnum, MaterialTypeEnum } from '@/app/api/books/books.pipe';
 import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { DataTable, DataTableContent, DataTableInputSearch, DataTablePagination } from '@/components/ui/data-table';
@@ -66,10 +67,10 @@ export default function BooksPage() {
       pagesQuantity: book.PÁGINAS,
       isbn: book.ISBN,
       tombo: book.TOMBO,
-      materialType: book.TIPO_DE_MATERIAL ? book.TIPO_DE_MATERIAL.toLowerCase() : undefined,
+      materialType: book.TIPO_DE_MATERIAL ? (book.TIPO_DE_MATERIAL.toLowerCase() as MaterialTypeEnum) : undefined,
       edition: book.EDIÇÃO,
       cddOrCdu: book.CDD_OU_CDU,
-      aquisitionMethod: book.AQUISIÇÃO ? book.AQUISIÇÃO.toLowerCase() : undefined,
+      aquisitionMethod: book.AQUISIÇÃO ? (book.AQUISIÇÃO.toLowerCase() as AquisitionMethodEnum) : undefined,
     }));
 
     console.log(formattedData);
@@ -86,7 +87,7 @@ export default function BooksPage() {
         } else {
           failInsertCount++;
         }
-      } catch (err) {
+      } catch {
         failInsertCount++;
       }
 

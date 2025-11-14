@@ -1,6 +1,6 @@
 'use client';
 
-import { EditBookDTO } from '@/app/api/books/[id]/book.dto';
+import { EditBookDTO } from '@/app/api/books/books.dto';
 import { BookSelectDTO } from '@/app/api/books/books.dto';
 import { Button } from '@/components/ui/button';
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -52,8 +52,8 @@ export default function BookFormEdit({ bookData }: { bookData: BookSelectDTO }) 
         )
       );
 
-      console.log(payload)
-      
+      console.log(payload);
+
       const response = await apiClient.patch(`/books/${bookData.id}`, payload);
       return response.data;
     },
@@ -74,8 +74,6 @@ export default function BookFormEdit({ bookData }: { bookData: BookSelectDTO }) 
     if (!inEdit) formEditBook.reset({ ...bookData } as any);
   }
 
-  
-  
   return (
     <Card className="flex-3 row-span-2 col-span-5">
       <CardHeader>
@@ -246,8 +244,8 @@ export default function BookFormEdit({ bookData }: { bookData: BookSelectDTO }) 
                             </FormControl>
                             <SelectContent>
                               {aquisitionMethods.map((aq) => (
-                                <SelectItem key={aq} value={capitalCase(aq)}>
-                                  {capitalCase(aq)}
+                                <SelectItem key={aq} value={capitalCase(aq ?? '')}>
+                                  {capitalCase(aq ?? '')}
                                 </SelectItem>
                               ))}
                             </SelectContent>

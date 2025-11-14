@@ -3,7 +3,7 @@ import { AppError } from '@/common/resolvers/app-error';
 import { db } from '@/config/db/db-client';
 import { booksTable } from '@/config/db/tables/books.tables';
 import { and, eq, sql } from 'drizzle-orm';
-import { EditBookDTO } from './[id]/book.dto';
+import { EditBookDTO } from './books.dto';
 
 export async function create(data: BookInsertDTO): Promise<BookSelectDTO> {
   try {
@@ -182,7 +182,6 @@ export async function search(
   try {
     const offset = options.offset ?? 0;
     const limit = options.limit ?? 20;
-
 
     const result = await db.execute<BookSelectDTO>(sql`
       SELECT

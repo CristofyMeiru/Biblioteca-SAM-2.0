@@ -25,7 +25,7 @@ export default function DeleteUserDialog({
   ...props
 }: {
   data: DeleteUserDialogProps;
-  handleOpenChangeDialog: Function;
+  handleOpenChangeDialog: (open: boolean) => void;
 }) {
   const queryClient = useQueryClient();
 
@@ -46,7 +46,7 @@ export default function DeleteUserDialog({
         toast.success('Usuário deletado com sucesso.', { id: context.toastId });
       }
       queryClient.invalidateQueries({ queryKey: ['users'] });
-      props.handleOpenChangeDialog();
+      props.handleOpenChangeDialog(false);
     },
     onError: (_error, _variables, context) => {
       if (context?.toastId) {
@@ -72,7 +72,7 @@ export default function DeleteUserDialog({
             {' '}
             <Icon name="x" /> Cancelar
           </AlertDialogCancel>
-          <AlertDialogAction onClick={()=> mutateDeleteUser()} className={buttonVariants({ variant: 'destructive' })}>
+          <AlertDialogAction onClick={() => mutateDeleteUser()} className={buttonVariants({ variant: 'destructive' })}>
             <Icon name="trash" /> Excluir usuário
           </AlertDialogAction>
         </AlertDialogFooter>

@@ -1,4 +1,4 @@
-import { EditBookDTO } from '@/app/api/books/[id]/book.dto';
+import { EditBookDTO } from '@/app/api/books/books.dto';
 import { FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { capitalCase } from 'change-case';

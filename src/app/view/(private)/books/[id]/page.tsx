@@ -1,10 +1,19 @@
 'use client';
 import { BookSelectDTO } from '@/app/api/books/books.dto';
-import { Button, buttonVariants } from '@/components/ui/button';
-import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import apiClient from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 import { capitalCase } from 'change-case';
@@ -15,7 +24,6 @@ import { toast } from 'sonner';
 import DeleteAlertDialog from './delete-alert-dialog';
 import BookFormEdit from './form-edit';
 import QuantityStatsCard from './quantity-stats-card';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 export default function BookPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = React.use(params);
@@ -88,7 +96,7 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
               <CardAction>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button size={"icon-sm"} variant={"ghost"} >
+                    <Button size={'icon-sm'} variant={'ghost'}>
                       <Icon className=" size-6 " name="alertCircle" />
                     </Button>
                   </TooltipTrigger>

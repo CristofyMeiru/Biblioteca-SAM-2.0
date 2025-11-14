@@ -1,11 +1,17 @@
 'use client';
 import { Button } from '@/components/ui/button';
+import {
+  DataTable,
+  DataTableContent,
+  DataTableHeader,
+  DataTableInputSearch,
+  DataTablePagination,
+} from '@/components/ui/data-table';
 import Icon from '@/components/ui/icon';
 import { authClient } from '@/lib/auth-client';
 import { useAuth } from '@/providers/auth-provider';
 import { useQuery } from '@tanstack/react-query';
 import CreateNewUserDialog from './create-new-user-dialog';
-import { UsersTable } from './users-table';
 import { usersTableColumns } from './users-table-columns';
 
 export default function AdminPage() {
@@ -41,7 +47,13 @@ export default function AdminPage() {
         <CreateNewUserDialog />
       </section>
       <div className=" flex flex-col ">
-        <UsersTable columns={usersTableColumns} data={data?.users ?? []} isLoading={loadingUsers} />
+        <DataTable name="users" columns={usersTableColumns} data={data?.users ?? []} isLoading={loadingUsers}>
+          <DataTableHeader>
+            <DataTableInputSearch />
+          </DataTableHeader>
+          <DataTableContent />
+          <DataTablePagination />
+        </DataTable>
       </div>
     </main>
   );

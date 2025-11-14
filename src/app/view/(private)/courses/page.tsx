@@ -22,12 +22,8 @@ export default function CoursesPage() {
 
   const [searchString, setSearchString] = useState<string | null>(null);
 
-  const {
-    refetch: refetchCourses,
-    data: coursesData,
-    isFetching: loadingCoursesData,
-  } = useQuery<CourseSelectDTO[]>({
-    queryKey: ['courses'],
+  const { data: coursesData, isFetching: loadingCoursesData } = useQuery<CourseSelectDTO[]>({
+    queryKey: ['courses', searchString],
     queryFn: async () => {
       const response = await apiClient.get<CourseSelectDTO[]>('/courses', { params: { search: searchString ?? null } });
       return response.data;
@@ -37,12 +33,6 @@ export default function CoursesPage() {
   useEffect(() => {
     setSearchString(searchParams.get('search'));
   }, [searchParams]);
-
-  useEffect(() => {
-    refetchCourses();
-  }, [searchString]);
-
-  console.log(loadingCoursesData);
 
   return (
     <main className=" w-full p-8 ">

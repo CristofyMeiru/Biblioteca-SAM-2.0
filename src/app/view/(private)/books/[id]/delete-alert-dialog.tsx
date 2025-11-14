@@ -1,7 +1,6 @@
-"use client";
+'use client';
 
-import { BookParamsDTO } from "@/app/api/books/[id]/book.dto";
-import { BookSelectDTO } from "@/app/api/books/books.dto";
+import { BookParamsDTO, BookSelectDTO } from '@/app/api/books/books.dto';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,15 +11,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { buttonVariants } from "@/components/ui/button";
-import Icon from "@/components/ui/icon";
-import { Spinner } from "@/components/ui/spinner";
-import apiClient from "@/lib/api";
-import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+} from '@/components/ui/alert-dialog';
+import { buttonVariants } from '@/components/ui/button';
+import Icon from '@/components/ui/icon';
+import { Spinner } from '@/components/ui/spinner';
+import apiClient from '@/lib/api';
+import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 export default function DeleteAlertDialog({ bookData }: { bookData: BookSelectDTO }) {
   const router = useRouter();
@@ -31,24 +30,24 @@ export default function DeleteAlertDialog({ bookData }: { bookData: BookSelectDT
     BookParamsDTO,
     any
   >({
-    mutationKey: ["delete-book", bookData.id],
+    mutationKey: ['delete-book', bookData.id],
     mutationFn: async (data: BookParamsDTO) => {
       const response = await apiClient.delete(`/books/${data.id}`);
 
       return response;
     },
     onMutate: () => {
-      const toastId = toast.loading("Deletando livro...");
+      const toastId = toast.loading('Deletando livro...');
       return { toastId };
     },
     onSuccess: (_data, _variables, context) => {
-      toast.success("Livro deletado com sucesso.", {
+      toast.success('Livro deletado com sucesso.', {
         id: context?.toastId,
       });
-      router.replace("/view/books");
+      router.replace('/view/books');
     },
     onError: (error, _variables, context) => {
-      toast.error("Não foi possível deletar o livro.", {
+      toast.error('Não foi possível deletar o livro.', {
         description: error.response?.data.message,
         id: context?.toastId,
       });
@@ -57,7 +56,7 @@ export default function DeleteAlertDialog({ bookData }: { bookData: BookSelectDT
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className={buttonVariants({ variant: "destructive" })}>
+      <AlertDialogTrigger className={buttonVariants({ variant: 'destructive' })}>
         <Icon name="trash" /> Deletar livro
       </AlertDialogTrigger>
       <AlertDialogContent>
@@ -76,9 +75,9 @@ export default function DeleteAlertDialog({ bookData }: { bookData: BookSelectDT
             onClick={() => {
               mutateDeleteBook({ id: bookData.id });
             }}
-            className={buttonVariants({ variant: "destructive" })}
+            className={buttonVariants({ variant: 'destructive' })}
           >
-            {" "}
+            {' '}
             {pendingDeleteBook ? (
               <Spinner />
             ) : (
