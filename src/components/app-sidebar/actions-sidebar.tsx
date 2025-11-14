@@ -12,14 +12,24 @@ import {
 
 const items: SidebarItem[] = [
   {
-    title: "Novo emprestimo",
-    icon: "plus",
-    url: "/view/book-loans/new",
+    title: 'Novo emprestimo',
+    icon: 'plus',
+    url: '/view/book-loans/new',
   },
   {
-    title: "Novo livro",
-    icon: "plus",
-    url: "/view/books/new",
+    title: 'Novo livro',
+    icon: 'plus',
+    url: '/view/books/new',
+  },
+  {
+    title: 'Nova frequência',
+    icon: 'plus',
+    url: '/view/attendance/new',
+  },
+  {
+    title: 'Novo curso / turma',
+    icon: 'plus',
+    url: '/view/courses',
   },
 ];
 
@@ -31,7 +41,7 @@ export default function ActionsSidebar() {
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton className="  " tooltip={item.title} asChild>
+              <SidebarMenuButton className=" " tooltip={item.title} asChild>
                 <Link href={item.url}>
                   <Icon name={item.icon} />
                   <span>{item.title}</span>

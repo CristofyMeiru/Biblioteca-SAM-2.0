@@ -40,6 +40,10 @@ export async function get(options: GetCourseQueryStringDTO): Promise<CourseSelec
   try {
     const offset = (options.page - 1) * options.limit;
 
+    if (options.search) {
+      return await coursesRepository.search(options.search);
+    }
+
     const result = await coursesRepository.find({}, { limit: options.limit, offset });
 
     return result;

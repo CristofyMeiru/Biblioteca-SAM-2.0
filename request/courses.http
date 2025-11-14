@@ -18,3 +18,5 @@ GET http://localhost:3000/api/courses
 ### Busca unitária de livro por ID
 GET http://localhost:3000/api/courses/{{course_id}}
 
+### Pesquisa de livro
+GET http://localhost:3000/api/courses?search=desenvimento

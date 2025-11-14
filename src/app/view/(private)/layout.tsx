@@ -1,7 +1,7 @@
 'use client';
 import { AppSidebar } from '@/components/app-sidebar';
-import { Button, buttonVariants } from '@/components/ui/button';
-import Icon from '@/components/ui/icon';
+import HeaderDropdown from '@/components/header-dropdown/header-dropdown';
+import { buttonVariants } from '@/components/ui/button';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Spinner } from '@/components/ui/spinner';
 import { useAuth } from '@/providers/auth-provider';
@@ -36,10 +36,7 @@ export default function PrivateLayout({ children }: Readonly<{ children: React.R
       <div className=" flex flex-col w-full min-h-screen ">
         <header className=" flex items-center justify-between bg-sidebar p-2 outline w-full ">
           <SidebarTrigger className={`${buttonVariants({ variant: 'ghost' })} size-9`} />
-          <Button className=" disabled:opacity-100  " size={'sm'} variant={'outline'} disabled>
-            {' '}
-            <Icon name="user" /> {session.user.name}
-          </Button>
+          <HeaderDropdown />
         </header>
         <main className=" w-full ">{children}</main>
       </div>

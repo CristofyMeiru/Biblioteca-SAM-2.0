@@ -1,22 +1,20 @@
-import { AppError, ErrorType } from "@/common/resolvers/app-error";
-import { BookInsertDTO, BookSelectDTO, CreateBookDTO, GetBooksDTO } from "./books.dto";
-import * as booksRepository from "./books.repository";
+import { AppError, ErrorType } from '@/common/resolvers/app-error';
+import { BookInsertDTO, BookSelectDTO, CreateBookDTO, GetBooksDTO } from './books.dto';
+import * as booksRepository from './books.repository';
 
 export async function get(options: GetBooksDTO): Promise<BookSelectDTO[]> {
   try {
-    const offset = (options.page - 1) * options.limit;
-
-    let result;
+    const { page, limit, status, search } = options;
+    const offset = (page - 1) * limit;
 
     
-    if (options.status == "unavailable") {
-      result = await booksRepository.unavailableBooks();
-    } else {
-
-      result = await booksRepository.find({}, { limit: options.limit, offset });
+    if (search) {
+      return await booksRepository.search(search, { limit, offset });
+    } else if (status === 'unavailable') {
+      return await booksRepository.unavailableBooks();
     }
 
-    return result;
+    return await booksRepository.find({}, { limit, offset });
   } catch (error) {
     throw error;
   }
@@ -27,7 +25,7 @@ export async function create(data: CreateBookDTO) {
     const bookAlreadyExists = await booksRepository.findOne({ title: data.title, authorName: data.authorName });
 
     if (bookAlreadyExists) {
-      throw new AppError("Livro já existente.", ErrorType.CONFLICT);
+      throw new AppError('Livro já existente.', ErrorType.CONFLICT);
     }
 
     const newBook: BookInsertDTO = {

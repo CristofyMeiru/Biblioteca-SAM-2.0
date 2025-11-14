@@ -1,7 +1,7 @@
-import { errorHandler } from "@/common/resolvers/error-handler";
-import { NextRequest, NextResponse } from "next/server";
-import * as pipe from "./books.pipe";
-import * as booksService from "./books.service";
+import { errorHandler } from '@/common/resolvers/error-handler';
+import { NextRequest, NextResponse } from 'next/server';
+import * as pipe from './books.pipe';
+import * as booksService from './books.service';
 
 export async function GET(req: NextRequest) {
   try {
@@ -13,6 +13,7 @@ export async function GET(req: NextRequest) {
       page: parsedValues.page,
       limit: parsedValues.limit,
       status: parsedValues.status,
+      search: parsedValues.search,
     });
 
     return NextResponse.json(result, { status: 200 });
@@ -29,7 +30,7 @@ export async function POST(req: NextRequest) {
 
     const result = await booksService.create(data);
 
-    return NextResponse.json({ message: "Livro criado com sucesso", book: result }, { status: 201 });
+    return NextResponse.json({ message: 'Livro criado com sucesso', book: result }, { status: 201 });
   } catch (error) {
     return errorHandler(error);
   }

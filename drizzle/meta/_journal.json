@@ -22,6 +22,20 @@
       "when": 1761598173668,
       "tag": "0002_lumpy_blizzard",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1762655267589,
+      "tag": "0003_clever_legion",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1762655381141,
+      "tag": "0004_friendly_vector",
+      "breakpoints": true
     }
   ]
 }

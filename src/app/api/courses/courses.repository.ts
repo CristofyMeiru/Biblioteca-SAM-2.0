@@ -1,7 +1,7 @@
 import { AppError } from '@/common/resolvers/app-error';
 import { db } from '@/config/db/db-client';
 import { coursesTable } from '@/config/db/tables/courses.table';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import { CourseInsertDTO, CourseSelectDTO, CourseUpdateDTO } from './courses.dto';
 
 export async function create(data: CourseInsertDTO): Promise<CourseSelectDTO> {
@@ -42,6 +42,32 @@ export async function find(
   } catch (error) {
     if (error instanceof Error) throw error;
     throw new Error('Não foi possível efetuar a busca.');
+  }
+}
+
+export async function search(query: string): Promise<CourseSelectDTO[]> {
+  try {
+    const result = await db.execute<CourseSelectDTO>(sql`
+  SELECT
+    id,
+    name,
+    slug,
+    grade_level AS "gradeLevel"
+  FROM courses
+  WHERE
+    name % ${query}
+    OR slug % ${query}
+    OR grade_level::text % ${query}
+  ORDER BY
+    greatest(
+      similarity(name, ${query}),
+      similarity(slug, ${query}),
+      similarity(grade_level::text, ${query})
+    ) DESC;
+`);
+    return result.rows;
+  } catch (error) {
+    throw error;
   }
 }
 

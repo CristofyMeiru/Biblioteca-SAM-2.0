@@ -31,7 +31,7 @@ export function UsersTable<TData, TValue>({ columns, data, isLoading }: DataTabl
         {table.getHeaderGroups().map((headerGroup) => (
           <TableRow key={headerGroup.id}>
             {headerGroup.headers.map((header, index) => (
-              <TableHead key={index} className=" text-green-950/80 ">
+              <TableHead key={index} className=" text-green-950/80 dark:text-green-100 ">
                 {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
               </TableHead>
             ))}

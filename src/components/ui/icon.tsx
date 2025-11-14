@@ -59,7 +59,12 @@ export const icons = {
   qrCode: lucide.QrCode,
   download: lucide.Download,
   save: lucide.Save,
-  userCheck: lucide.UserCheck
+  userCheck: lucide.UserCheck,
+  sun: lucide.Sun,
+  moon: lucide.Moon,
+  chevronFirst: lucide.ChevronFirst,
+  chevronLast: lucide.ChevronLast,
+  moreHorizontal: lucide.MoreHorizontal,
 } as const;
 
 export type IconName = keyof typeof icons;

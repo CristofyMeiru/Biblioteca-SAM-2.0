@@ -9,15 +9,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { BetterAuthError, User } from 'better-auth';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { authUserSchema, type AuthUser } from './auth.schema';
-import { useRouter } from 'next/navigation';
 
 export default function LogInPage() {
   const [showPass, setShowPass] = useState<boolean>();
-  const router = useRouter()
+  const router = useRouter();
 
   const authForm = useForm<AuthUser>({
     defaultValues: {
@@ -38,7 +38,7 @@ export default function LogInPage() {
       return data.user;
     },
     onSuccess: (data) => {
-      router.replace("/view/dashboard")
+      router.replace('/view/dashboard');
       toast.success(`Bem vindo(a), novamente ${data.name}`);
     },
     onError: () => {
@@ -51,13 +51,13 @@ export default function LogInPage() {
       <section className="  h-full flex flex-col flex-1 justify-center items-center ">
         <div className=" flex flex-col items-center mb-10">
           <Image src="/logo.png" width={100} height={130} alt="/logo.png" className=" size-20 " />
-          <h1 className=" text-3xl font-semibold text-green-900 ">Biblioteca-SAM</h1>
+          <h1 className=" text-3xl font-semibold text-green-900 dark:text-green-500 ">Biblioteca-SAM</h1>
         </div>
         <Form {...authForm}>
           <form onSubmit={authForm.handleSubmit((data) => mutateAuthUser(data))} className=" space-y-5 w-2/5 ">
             <div className=" text-center ">
               <h1 className=" text-2xl font-semibold ">Bem-vindo de volta! </h1>
-              <span className=" text-sm text-green-700 ">Entre na sua conta para gerenciar a biblioteca.</span>
+              <span className=" text-sm text-muted-foreground ">Entre na sua conta para gerenciar a biblioteca.</span>
             </div>
             <FormField
               control={authForm.control}
@@ -99,8 +99,8 @@ export default function LogInPage() {
           </form>
         </Form>
         <div className=" flex items-baseline space-x-1 ">
-          <span className=" text-sm mt-4 text-neutral-600 ">Esqueceu a senha?</span>{' '}
-          <Button className=" !p-0 h-fit  " variant={'link'}>
+          <span className=" text-sm mt-4 text-muted-foreground ">Esqueceu a senha?</span>{' '}
+          <Button className=" !p-0 h-fit " variant={'link'}>
             Clique aqui
           </Button>
         </div>

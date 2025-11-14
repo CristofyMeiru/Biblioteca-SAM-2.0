@@ -14,7 +14,7 @@ import Icon from '@/components/ui/icon';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import apiClient from '@/lib/api';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -22,6 +22,8 @@ import { toast } from 'sonner';
 const gradeLevels = ['1', '2', '3'];
 
 export default function CreateCourseDialog() {
+  const queryClient = useQueryClient()
+  
   const formCreateCourse = useForm<CreateCourseDTO>({
     defaultValues: {
       name: '',
@@ -48,6 +50,7 @@ export default function CreateCourseDialog() {
       toast.success('Curso adicionado com sucesso.', {
         id: context?.toastId,
       });
+      queryClient.invalidateQueries({queryKey: ["courses"]})
     },
     onError: (error, _variables, context) => {
       toast.error('Não foi possível adicionar o curso.', {
@@ -105,7 +108,7 @@ export default function CreateCourseDialog() {
               name="gradeLevel"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Abreviação do nome</FormLabel>
+                  <FormLabel>Série</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className=" w-full ">

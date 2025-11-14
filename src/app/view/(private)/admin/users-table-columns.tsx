@@ -21,13 +21,13 @@ export const usersTableColumns: ColumnDef<UserWithRole>[] = [
     header: () => <div className=" text-center ">Papel administrativo</div>,
     cell: (cell) => {
       const background = cell.getValue() == 'admin' ? ' bg-blue-500/20 ' : ' bg-primary/40 ';
-      const textColor = cell.getValue() == 'admin' ? ' text-blue-800 ' : ' text-green-900 ';
+      const textColor = cell.getValue() == 'admin' ? ' text-blue-800 dark:text-blue-300 ' : ' text-green-900 dark:text-green-300 ';
       const label = cell.getValue() == 'user' ? 'Bibliotecário' : 'Admin';
       const iconName: IconName = cell.getValue() == 'admin' ? 'userCog' : 'user';
 
       return (
         <div className=" text-center ">
-          <Kbd className={` text-[13px] py-3 px-2 ${background + textColor}`}>
+          <Kbd className={` border text-[13px] py-3 px-2 ${background + textColor}`}>
             <Icon name={iconName} /> {label}
           </Kbd>
         </div>

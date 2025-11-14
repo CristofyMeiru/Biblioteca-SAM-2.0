@@ -1,9 +1,9 @@
-import { BookInsertDTO, BookSelectDTO } from "@/app/api/books/books.dto";
-import { AppError } from "@/common/resolvers/app-error";
-import { db } from "@/config/db/db-client";
-import { booksTable } from "@/config/db/tables/books.tables";
-import { and, eq, sql } from "drizzle-orm";
-import { EditBookDTO } from "./[id]/book.dto";
+import { BookInsertDTO, BookSelectDTO } from '@/app/api/books/books.dto';
+import { AppError } from '@/common/resolvers/app-error';
+import { db } from '@/config/db/db-client';
+import { booksTable } from '@/config/db/tables/books.tables';
+import { and, eq, sql } from 'drizzle-orm';
+import { EditBookDTO } from './[id]/book.dto';
 
 export async function create(data: BookInsertDTO): Promise<BookSelectDTO> {
   try {
@@ -17,7 +17,7 @@ export async function create(data: BookInsertDTO): Promise<BookSelectDTO> {
 }
 
 export async function find(
-  fields: Partial<Omit<BookSelectDTO, "createdAt" | "updatedAt">>,
+  fields: Partial<Omit<BookSelectDTO, 'createdAt' | 'updatedAt'>>,
   options?: { offset?: number; limit?: number }
 ): Promise<BookSelectDTO[]> {
   try {
@@ -53,12 +53,12 @@ export async function find(
     return await query;
   } catch (error) {
     if (error instanceof Error) throw error;
-    throw new Error("Não foi possível efetuar a busca.");
+    throw new Error('Não foi possível efetuar a busca.');
   }
 }
 
 export async function findOne(
-  fields: Partial<Omit<BookSelectDTO, "createdAt" | "updatedAt">>
+  fields: Partial<Omit<BookSelectDTO, 'createdAt' | 'updatedAt'>>
 ): Promise<BookSelectDTO | null> {
   try {
     const allowedFilters: Partial<Record<keyof typeof booksTable, any>> = {
@@ -97,7 +97,7 @@ export async function findOne(
     return result;
   } catch (error) {
     if (error instanceof Error) throw error;
-    throw new Error("Não foi possivel efetuar a busca.");
+    throw new Error('Não foi possivel efetuar a busca.');
   }
 }
 
@@ -122,11 +122,11 @@ export async function updateById(id: string, fields: EditBookDTO): Promise<BookS
     return updateResult;
   } catch (error) {
     if (error instanceof AppError) throw error;
-    throw new Error("Não foi possível atualizar os campos");
+    throw new Error('Não foi possível atualizar os campos');
   }
 }
 
-export async function count(fields: Partial<Omit<BookSelectDTO, "createdAt" | "updatedAt">>): Promise<number> {
+export async function count(fields: Partial<Omit<BookSelectDTO, 'createdAt' | 'updatedAt'>>): Promise<number> {
   try {
     const allowedFilters: Partial<Record<keyof typeof booksTable, any>> = {
       id: booksTable.id,
@@ -170,8 +170,70 @@ export async function unavailableBooks(): Promise<BookSelectDTO[]> {
   try {
     const result = await db.select().from(booksTable).where(eq(booksTable.quantity, booksTable.loanedQuantity));
 
-    
     return result;
+  } catch (error) {
+    throw error;
+  }
+}
+export async function search(
+  query: string,
+  options: { offset?: number; limit?: number } = {}
+): Promise<BookSelectDTO[]> {
+  try {
+    const offset = options.offset ?? 0;
+    const limit = options.limit ?? 20;
+
+
+    const result = await db.execute<BookSelectDTO>(sql`
+      SELECT
+        id,
+        title,
+        author_name AS "authorName",
+        publisher,
+        material_type AS "materialType",
+        aquisition_method AS "aquisitionMethod",
+        pages_quantity AS "pagesQuantity",
+        genre,
+        isbn,
+        quantity,
+        loaned_quantity AS "loanedQuantity",
+        cdd_or_cdu AS "cddOrCdu",
+        tombo,
+        edition,
+        created_at AS "createdAt",
+        updated_at AS "updatedAt"
+      FROM books
+      WHERE
+        title % ${query}
+        OR author_name % ${query}
+        OR publisher % ${query}
+        OR material_type % ${query}
+        OR aquisition_method % ${query}
+        OR pages_quantity::text % ${query}
+        OR genre % ${query}
+        OR isbn % ${query}
+        OR cdd_or_cdu % ${query}
+        OR tombo % ${query}
+        OR edition % ${query}
+      ORDER BY
+        greatest(
+          similarity(title, ${query}),
+          similarity(author_name, ${query}),
+          similarity(publisher, ${query}),
+          similarity(material_type, ${query}),
+          similarity(aquisition_method, ${query}),
+          similarity(pages_quantity::text, ${query}),
+          similarity(genre, ${query}),
+          similarity(isbn, ${query}),
+          similarity(cdd_or_cdu, ${query}),
+          similarity(tombo, ${query}),
+          similarity(edition, ${query})
+        ) DESC
+      LIMIT ${limit}
+      OFFSET ${offset}
+    `);
+
+    return result.rows;
   } catch (error) {
     throw error;
   }

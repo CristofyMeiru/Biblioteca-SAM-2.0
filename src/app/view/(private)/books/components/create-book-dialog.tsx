@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { CreateBookDTO } from "@/app/api/books/books.dto";
-import { createBookSchema } from "@/app/api/books/books.pipe";
-import { Button } from "@/components/ui/button";
+import { CreateBookDTO } from '@/app/api/books/books.dto';
+import { createBookSchema } from '@/app/api/books/books.pipe';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -10,60 +10,60 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import Icon from "@/components/ui/icon";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Spinner } from "@/components/ui/spinner";
-import apiClient from "@/lib/api";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AxiosError, AxiosResponse } from "axios";
-import { capitalCase } from "change-case";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+} from '@/components/ui/dialog';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import Icon from '@/components/ui/icon';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Spinner } from '@/components/ui/spinner';
+import apiClient from '@/lib/api';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AxiosError, AxiosResponse } from 'axios';
+import { capitalCase } from 'change-case';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
 
-export const aquisitionMethods: CreateBookDTO["aquisitionMethod"][] = ["compra", "doação", "permuta"];
-export const materialTypes = ["Livro", "TCC", "Revista", "Periódico", "Outro"];
+export const aquisitionMethods: CreateBookDTO['aquisitionMethod'][] = ['compra', 'doação', 'permuta'];
+export const materialTypes = ['Livro', 'TCC', 'Revista', 'Periódico', 'Outro'];
 
 export default function CreateBookDialog() {
   const queryClient = useQueryClient();
 
   const formCreateBook = useForm<z.infer<typeof createBookSchema>>({
     defaultValues: {
-      title: "",
-      authorName: "",
-      publisher: "",
-      quantity: "",
-      materialType: "Livro",
-      aquisitionMethod: "compra",
-      pagesQuantity: "",
-      genre: "",
-      isbn: "",
-      cddOrCdu: "",
-      tombo: "",
-      edition: "",
+      title: '',
+      authorName: '',
+      publisher: '',
+      quantity: '',
+      materialType: 'Livro',
+      aquisitionMethod: 'compra',
+      pagesQuantity: '',
+      genre: '',
+      isbn: '',
+      cddOrCdu: '',
+      tombo: '',
+      edition: '',
     },
-    mode: "onBlur",
+    mode: 'onBlur',
     resolver: zodResolver(createBookSchema),
   });
 
   const { mutate: mutateNewBook, isPending: pendingCreateBook } = useMutation<AxiosResponse, Error, CreateBookDTO>({
-    mutationKey: ["new-book"],
+    mutationKey: ['new-book'],
     mutationFn: async (data: CreateBookDTO) => {
-      const response = await apiClient.post("/books", data);
+      const response = await apiClient.post('/books', data);
       return response.data;
     },
     onSuccess: () => {
-      toast.success("Livro criado com sucesso");
-      queryClient.invalidateQueries({ queryKey: ["books"] });
+      toast.success('Livro criado com sucesso');
+      queryClient.invalidateQueries({ queryKey: ['books'] });
       formCreateBook.reset();
     },
     onError: (error) => {
-      toast.error("Não foi possível realizar a inserção.", {
-        description: `${error instanceof AxiosError ? error.response?.data.message : "Erro interno inesperado"} `,
+      toast.error('Não foi possível realizar a inserção.', {
+        description: `${error instanceof AxiosError ? error.response?.data.message : 'Erro interno inesperado'} `,
       });
     },
   });
@@ -244,8 +244,8 @@ export default function CreateBookDialog() {
                       </FormControl>
                       <SelectContent>
                         {aquisitionMethods.map((aq) => (
-                          <SelectItem key={aq} value={aq}>
-                            {capitalCase(aq)}
+                          <SelectItem key={aq} value={String(aq)}>
+                            {capitalCase(String(aq))}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -286,7 +286,7 @@ export default function CreateBookDialog() {
 
             <div className="flex justify-end pt-2">
               <Button type="submit" disabled={pendingCreateBook}>
-                {pendingCreateBook ? <Spinner /> : "Salvar"}
+                {pendingCreateBook ? <Spinner /> : 'Salvar'}
               </Button>
             </div>
           </form>

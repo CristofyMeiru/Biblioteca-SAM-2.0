@@ -1,21 +1,21 @@
-"use client";
-import { BookSelectDTO } from "@/app/api/books/books.dto";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import Icon from "@/components/ui/icon";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Spinner } from "@/components/ui/spinner";
-import apiClient from "@/lib/api";
-import { useQuery } from "@tanstack/react-query";
-import { capitalCase } from "change-case";
-import Link from "next/link";
-import { QRCodeSVG } from "qrcode.react";
-import React from "react";
-import { toast } from "sonner";
-import DeleteAlertDialog from "./delete-alert-dialog";
-import BookFormEdit from "./form-edit";
-import QuantityStatsCard from "./quantity-stats-card";
-
+'use client';
+import { BookSelectDTO } from '@/app/api/books/books.dto';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import Icon from '@/components/ui/icon';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Spinner } from '@/components/ui/spinner';
+import apiClient from '@/lib/api';
+import { useQuery } from '@tanstack/react-query';
+import { capitalCase } from 'change-case';
+import Link from 'next/link';
+import { QRCodeSVG } from 'qrcode.react';
+import React from 'react';
+import { toast } from 'sonner';
+import DeleteAlertDialog from './delete-alert-dialog';
+import BookFormEdit from './form-edit';
+import QuantityStatsCard from './quantity-stats-card';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 export default function BookPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = React.use(params);
@@ -25,7 +25,7 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
     isLoading: loadingBook,
     isError,
   } = useQuery<BookSelectDTO>({
-    queryKey: ["book", resolvedParams.id],
+    queryKey: ['book', resolvedParams.id],
     queryFn: async () => {
       const result = await apiClient.get<BookSelectDTO>(`/books/${resolvedParams.id}`);
 
@@ -43,8 +43,8 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
   }
 
   if (isError) {
-    toast.error("Erro ao carregar", {
-      description: "Não foi possível buscar as informações do livro.",
+    toast.error('Erro ao carregar', {
+      description: 'Não foi possível buscar as informações do livro.',
     });
     return null;
   }
@@ -54,8 +54,8 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
       <main className=" p-8 space-y-4  ">
         <section className=" flex items-center justify-between space-x-2 ">
           <div className=" flex items-center space-x-2 ">
-            <Link href={"/view/books"}>
-              <Button variant={"ghost"}>
+            <Link href={'/view/books'}>
+              <Button variant={'ghost'}>
                 <Icon name="chevronLeft" />
               </Button>
             </Link>
@@ -63,7 +63,7 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
               {loadingBook ? (
                 <Skeleton className=" w-140 h-10 " />
               ) : (
-                <h1 className=" font-semibold text-3xl ">{capitalCase(bookData ? bookData?.title : "")}</h1>
+                <h1 className=" font-semibold text-3xl ">{capitalCase(bookData ? bookData?.title : '')}</h1>
               )}
               <span className=" text-muted-foreground ">Detalhes completos do livro</span>
             </div>
@@ -75,19 +75,38 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
           <BookFormEdit bookData={bookData} />
 
           <Card className=" flex-1 row-span-2 col-span-2">
-            <CardHeader className=" flex items-center ">
-              <Button size={"icon-lg"} className=" disabled:opacity-100 " disabled>
-                <Icon name="qrCode" />
-              </Button>
-              <div>
-                <CardTitle className=" text-2xl ">QR Code</CardTitle>
-                <CardDescription>QR code identificador do livro</CardDescription>
+            <CardHeader>
+              <div className=" flex items-center space-x-2 ">
+                <Button size={'icon-lg'} className=" disabled:opacity-100 " disabled>
+                  <Icon name="qrCode" />
+                </Button>
+                <div>
+                  <CardTitle className=" text-2xl ">QR Code</CardTitle>
+                  <CardDescription>QR code identificador do livro</CardDescription>
+                </div>
               </div>
+              <CardAction>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button size={"icon-sm"} variant={"ghost"} >
+                      <Icon className=" size-6 " name="alertCircle" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    className=" bg-background text-muted-foreground border border-primary w-42 "
+                    side="left"
+                  >
+                    <span className=" text-sm ">
+                      As informações contidas no qrcode são <b>Título</b>, <b>Nome do Autor</b> e <b>Gênero</b>
+                    </span>
+                  </TooltipContent>
+                </Tooltip>
+              </CardAction>
             </CardHeader>
             <CardContent className=" flex flex-1 justify-center items-center ">
               <QRCodeSVG
                 className=" size-52 "
-                value={"dsdkaosidjqoiweoqwjdlcznlczxlcnzxcnzlxjcoksjdqoiwueoqiwueoiqwue"}
+                value={`TITULO: ${bookData.title}\nAUTOR: ${bookData.authorName}\nGÊNERO: ${bookData.genre}`}
               />
             </CardContent>
             <CardFooter>

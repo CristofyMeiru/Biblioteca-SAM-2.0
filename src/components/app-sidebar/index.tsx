@@ -19,8 +19,8 @@ import type { SidebarItem } from '@/types/Item-sidebar';
 import { useAuth } from '@/providers/auth-provider';
 import Image from 'next/image';
 import Link from 'next/link';
+import SignOutDialog from '../header-dropdown/sign-out-dialog';
 import ActionsSidebar from './actions-sidebar';
-import SignOutDialog from './sign-out-dialog';
 
 const items: SidebarItem[] = [
   {
@@ -39,7 +39,7 @@ const items: SidebarItem[] = [
     icon: 'book',
   },
   {
-    title: 'Cursos',
+    title: 'Cursos e Turmas',
     url: '/view/courses',
     icon: 'graduationCap',
   },
@@ -67,12 +67,12 @@ export function AppSidebar() {
               className={`${open ? 'size-10' : 'size-5'} `}
             />
             {open && (
-              <h1 className=" text-green-900 font-semibold text-lg text-nowrap overflow-auto ">Biblioteca SAM</h1>
+              <h1 className=" text-green-900 dark:text-green-400 font-semibold text-lg text-nowrap overflow-auto ">Biblioteca SAM</h1>
             )}
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent className=" text-green-950   ">
+      <SidebarContent className=" text-green-950 dark:text-green-50  ">
         <SidebarGroup>
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
