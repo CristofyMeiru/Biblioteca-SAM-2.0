@@ -21,6 +21,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';
 import { capitalCase } from 'change-case';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -30,6 +32,11 @@ export const materialTypes: MaterialTypeEnum[] = ['Livro', 'TCC', 'Revista', 'Pe
 
 export default function CreateBookDialog() {
   const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const formCreateBook = useForm<z.infer<typeof createBookSchema>>({
     defaultValues: {
@@ -68,8 +75,28 @@ export default function CreateBookDialog() {
     },
   });
 
+  function handleOpenChange(value: boolean) {
+    const params = new URLSearchParams(searchParams.toString());
+    if (!isOpen) {
+      params.set('dialog', 'new-book');
+    } else {
+      params.delete('dialog');
+    }
+
+    router.replace(`${pathname}?${params.toString()}`);
+    router.refresh();
+  }
+
+  useEffect(() => {
+    if (searchParams.get('dialog') === 'new-book') {
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  }, [searchParams]);
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button>
           <Icon name="plus" /> Adicionar

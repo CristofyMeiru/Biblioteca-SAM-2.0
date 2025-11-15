@@ -16,14 +16,22 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import apiClient from '@/lib/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 const gradeLevels = ['1', '2', '3'];
 
 export default function CreateCourseDialog() {
-  const queryClient = useQueryClient()
-  
+  const queryClient = useQueryClient();
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const formCreateCourse = useForm<CreateCourseDTO>({
     defaultValues: {
       name: '',
@@ -50,7 +58,7 @@ export default function CreateCourseDialog() {
       toast.success('Curso adicionado com sucesso.', {
         id: context?.toastId,
       });
-      queryClient.invalidateQueries({queryKey: ["courses"]})
+      queryClient.invalidateQueries({ queryKey: ['courses'] });
     },
     onError: (error, _variables, context) => {
       toast.error('Não foi possível adicionar o curso.', {
@@ -60,8 +68,31 @@ export default function CreateCourseDialog() {
     },
   });
 
+  function handleOpenChange(open: boolean) {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (open) {
+      params.set('dialog', 'new-course');
+      setIsOpen(true);
+    } else {
+      params.delete('dialog');
+      setIsOpen(false);
+    }
+
+    router.replace(`${pathname}?${params.toString()}`);
+    router.refresh();
+  }
+
+  useEffect(() => {
+    if (searchParams.get('dialog') === 'new-course') {
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  }, [searchParams]);
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger className={buttonVariants({ variant: 'default' })}>
         <Icon name="plus" /> Adicionar
       </DialogTrigger>

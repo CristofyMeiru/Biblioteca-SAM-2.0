@@ -19,7 +19,7 @@ const items: SidebarItem[] = [
   {
     title: 'Novo livro',
     icon: 'plus',
-    url: '/view/books/new',
+    url: '/view/books?dialog=new-book',
   },
   {
     title: 'Nova frequência',
@@ -29,7 +29,7 @@ const items: SidebarItem[] = [
   {
     title: 'Novo curso / turma',
     icon: 'plus',
-    url: '/view/courses',
+    url: '/view/courses?dialog=new-course',
   },
 ];
 

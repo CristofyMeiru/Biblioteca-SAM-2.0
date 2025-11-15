@@ -10,6 +10,7 @@ import {
   DataTablePagination,
 } from '@/components/ui/data-table';
 import Icon from '@/components/ui/icon';
+import { Separator } from '@/components/ui/separator';
 import apiClient from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
@@ -36,7 +37,7 @@ export default function CoursesPage() {
 
   return (
     <main className=" w-full p-8 ">
-      <section className="flex justify-between items-center mb-6">
+      <section className="flex justify-between items-center">
         <div className=" flex items-center space-x-2 ">
           <Button size={'icon-lg'} className=" disabled:opacity-100 " disabled>
             <Icon name="graduationCap" />
@@ -48,6 +49,9 @@ export default function CoursesPage() {
         </div>
         <CreateCourseDialog />
       </section>
+
+      <Separator className=' my-4 ' />
+
       <section>
         <DataTable
           name="courses-table"

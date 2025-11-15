@@ -1,61 +1,25 @@
 'use client';
 
-import Icon from '@/components/ui/icon';
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import type { SidebarItem } from '@/types/Item-sidebar';
 
-import { useAuth } from '@/providers/auth-provider';
 import Image from 'next/image';
-import Link from 'next/link';
 import SignOutDialog from '../header-dropdown/sign-out-dialog';
 import ActionsSidebar from './actions-sidebar';
-
-const items: SidebarItem[] = [
-  {
-    title: 'Painel de controle',
-    url: '/view/dashboard',
-    icon: 'layoutDashboard',
-  },
-  {
-    title: 'Empréstimos',
-    url: '/view/book-loans',
-    icon: 'handshake',
-  },
-  {
-    title: 'Livros',
-    url: '/view/books',
-    icon: 'book',
-  },
-  {
-    title: 'Cursos e Turmas',
-    url: '/view/courses',
-    icon: 'graduationCap',
-  },
-  {
-    title: 'Frequência',
-    url: '/view/attendance',
-    icon: 'userCheck',
-  },
-] as const;
+import PrimaryMenuSidebar from './primary-menu-sidebar';
 
 export function AppSidebar() {
   const { open } = useSidebar();
-  const { session } = useAuth();
 
   return (
-    <Sidebar collapsible="icon" className=" outline ">
+    <Sidebar collapsible="icon">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem className={`flex items-center ${!open && 'justify-center'} cursor-default space-x-2`}>
@@ -67,41 +31,19 @@ export function AppSidebar() {
               className={`${open ? 'size-10' : 'size-5'} `}
             />
             {open && (
-              <h1 className=" text-green-900 dark:text-green-400 font-semibold text-lg text-nowrap overflow-auto ">Biblioteca SAM</h1>
+              <h1 className=" text-green-900 dark:text-green-400 font-semibold text-lg text-nowrap overflow-auto ">
+                Biblioteca SAM
+              </h1>
             )}
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+
       <SidebarContent className=" text-green-950 dark:text-green-50  ">
-        <SidebarGroup>
-          <SidebarGroupLabel>Menu</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {session?.user.role == 'admin' && (
-                <SidebarMenuItem>
-                  <SidebarMenuButton tooltip={'Painel administrativo'} asChild>
-                    <Link href={'/view/admin'}>
-                      <Icon name={'userCog'} />
-                      <span>Painel administrativo</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )}
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton tooltip={item.title} asChild>
-                    <Link href={item.url}>
-                      <Icon name={item.icon} />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <PrimaryMenuSidebar />
         <ActionsSidebar />
       </SidebarContent>
+
       <SidebarFooter>
         <SignOutDialog />
       </SidebarFooter>
