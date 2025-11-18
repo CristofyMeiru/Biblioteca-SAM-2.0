@@ -38,23 +38,30 @@ export type LivroInfo = {
 export default function BooksPage() {
   const searchParams = useSearchParams();
 
-  const [pagination, setPagination] = useState<{ page: number; limit: number }>({ page: 1, limit: 50 });
-
   const search = searchParams.get('search') ?? null;
+  const pageParam = searchParams.get('page') ?? '1';
+  const limitParam = searchParams.get('limit') ?? '50';
+  const page = Number(pageParam);
+  const limit = Number(limitParam);
 
-  const { data: booksData, isLoading: loadingBooks } = useQuery<BookSelectDTO[]>({
-    queryKey: ['books', { search }],
+
+  const {
+    data: booksData,
+    isLoading: loadingBooks,
+  } = useQuery<BookSelectDTO[]>({
+    queryKey: ['books', { search, page, limit }],
     queryFn: async () => {
       const result = await apiClient.get<BookSelectDTO[]>('/books', {
         params: {
-          limit: pagination.limit,
-          page: pagination.page,
+          limit,
+          page,
           search,
         },
       });
 
       return result.data;
     },
+    enabled: true,
   });
 
   function wait(ms: number) {
@@ -98,18 +105,13 @@ export default function BooksPage() {
         failInsertCount++;
       }
 
-      await wait(500);
+      await wait(100);
     }
 
     console.log('Sucedido:', successInsertCount);
     console.log('Falhou:', failInsertCount);
   }
 
-  useEffect(() => {
-    const page = Number(searchParams.get('page') ?? 1);
-    const limit = Number(searchParams.get('limit') ?? 50);
-    setPagination({ page, limit });
-  }, [searchParams]);
 
   return (
     <main className=" p-8 ">

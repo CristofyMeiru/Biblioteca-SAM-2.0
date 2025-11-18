@@ -65,6 +65,8 @@ export const icons = {
   chevronFirst: lucide.ChevronFirst,
   chevronLast: lucide.ChevronLast,
   moreHorizontal: lucide.MoreHorizontal,
+  userPlus: lucide.UserPlus,
+  bookPlus: lucide.BookPlus
 } as const;
 
 export type IconName = keyof typeof icons;

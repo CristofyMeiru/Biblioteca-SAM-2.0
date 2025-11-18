@@ -17,6 +17,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { coursesTableColumns } from './courses-table-columns';
 import CreateCourseDialog from './create-course-dialog';
+import EditCourseDialog from './edit-course-dialog';
 
 export default function CoursesPage() {
   const searchParams = useSearchParams();
@@ -44,13 +45,13 @@ export default function CoursesPage() {
           </Button>
           <div>
             <h1 className="text-2xl font-bold">Cursos e Turmas</h1>
-            <span className=" text-sm text-muted-foreground">Gerencie os cursos e turmas cadastrados</span>
+            <span className=" text-sm text-muted-foreground">Gerencie as turmas e cursos cadastrados</span>
           </div>
         </div>
         <CreateCourseDialog />
       </section>
 
-      <Separator className=' my-4 ' />
+      <Separator className=" my-4 " />
 
       <section>
         <DataTable
@@ -66,6 +67,7 @@ export default function CoursesPage() {
           <DataTablePagination />
         </DataTable>
       </section>
+      <EditCourseDialog />
     </main>
   );
 }

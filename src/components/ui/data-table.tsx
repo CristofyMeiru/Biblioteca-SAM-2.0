@@ -8,7 +8,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from './button';
 import Icon from './icon';
 import { Input } from './input';
@@ -63,7 +63,7 @@ export function DataTableHeader({ children }: { children: React.ReactNode }) {
   const ctx = React.useContext(dataTableContext);
   if (!ctx) throw new Error('DataTableContent must be inside <DataTable>');
 
-  return <section>{children}</section>;
+  return <section className=" py-4 ">{children}</section>;
 }
 
 export function DataTableInputSearch() {
@@ -198,72 +198,74 @@ export function DataTablePagination() {
 
   const { table, name } = ctx;
 
-  const pageIndex = table.getState().pagination.pageIndex;
-  const pageSize = table.getState().pagination.pageSize;
-
-  const total = table.getFilteredRowModel().rows.length;
-
-  const start = pageIndex * pageSize + 1;
-  const end = Math.min((pageIndex + 1) * pageSize, total);
+  const [pageIndex, setPageIndex] = React.useState<number>(1);
 
   function handleChangeSize(value: number | string) {
     localStorage.setItem(`${name}-page-size`, String(value));
     table.setPagination((prev) => ({
       ...prev,
       pageSize: Number(value),
-      pageIndex: 0,
     }));
   }
 
-  React.useEffect(() => {
-    const current = new URLSearchParams(searchParams.toString());
+  function handleChangePage(pageIndex: number) {
+    const params = new URLSearchParams(searchParams.toString());
 
-    const pageFromTable = String(pageIndex + 1);
-    const limitFromTable = String(pageSize);
+    params.set('page', String(pageIndex));
 
-    let changed = false;
-    if (current.get('page') !== pageFromTable) {
-      current.set('page', pageFromTable);
-      changed = true;
+    router.replace(`${pathname}?${params.toString()}`);
+    router.refresh();
+  }
+
+  useEffect(() => {
+    const page = searchParams.get('page');
+    const limit = searchParams.get('limit');
+
+    if (!page || !limit) {
+      const params = new URLSearchParams(searchParams.toString());
+
+      params.set('page', page ?? '1');
+      params.set('limit', limit ?? String(table.getState().pagination.pageSize));
+
+      router.replace(`${pathname}?${params.toString()}`);
     }
-    if (current.get('limit') !== limitFromTable) {
-      current.set('limit', limitFromTable);
-      changed = true;
-    }
+  }, []);
 
-    if (!changed) return; 
+  useEffect(() => {
+    setPageIndex(Number(searchParams.get('page')));
+  }, [searchParams]);
 
-    router.replace(`${pathname}?${current.toString()}`, { scroll: false });
-  }, [pageIndex, pageSize, searchParams, pathname, router]);
   return (
     <section className="grid items-center grid-rows-1 grid-cols-3">
-      <span className="col-span-1 text-sm text-muted-foreground">
-        Exibindo {start}-{end} de {total}
-      </span>
+      <span className="col-span-1 text-sm text-muted-foreground">{/* Exibindo {start}-{end} de {total} */}</span>
 
       <section className="flex items-center justify-center col-span-1 space-x-2">
-        <Button onClick={() => table.setPageIndex(0)} variant="outline" disabled={pageIndex == 0}>
+        <Button onClick={() => handleChangePage(1)} variant="outline">
           <Icon name="chevronFirst" />
         </Button>
 
-        <Button onClick={() => table.previousPage()} variant="outline" disabled={!table.getCanPreviousPage()}>
+        <Button
+          onClick={() => handleChangePage(Number(searchParams.get('page')) - 1)}
+          variant="outline"
+          disabled={pageIndex <= 1}
+        >
           <Icon name="chevronLeft" />
         </Button>
 
-        <Button variant="outline">{pageIndex + 1}</Button>
+        <Button variant="outline">{pageIndex}</Button>
 
-        <Button onClick={() => table.setPageIndex(pageIndex + 1)} variant="outline">
+        <Button onClick={() => handleChangePage(Number(searchParams.get('page')) + 1)} variant="outline">
           <Icon name="chevronRight" />
         </Button>
 
-        <Button onClick={() => table.setPageIndex(table.getPageCount?.() - 1)} variant="outline">
+        <Button onClick={() => table.setPageIndex(table.getPageCount?.() - 1)} variant="outline" disabled>
           <Icon name="chevronLast" />
         </Button>
       </section>
 
       <div className="col-span-1 flex items-center justify-end">
         <span className="text-sm text-muted-foreground mr-2">Tamanho da página</span>
-        <Select defaultValue={String(pageSize)} onValueChange={handleChangeSize}>
+        <Select defaultValue={String(table.getState().pagination.pageSize)} onValueChange={handleChangeSize}>
           <SelectTrigger className="min-w-20">
             <SelectValue />
           </SelectTrigger>

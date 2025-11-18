@@ -47,8 +47,8 @@ export const createBookSchema = z.object({
     .optional(),
   genre: z.string().max(30, 'O Gênero deve ter no máximo 30 caracteres.').toLowerCase(),
   isbn: z.string().max(60, 'O ISBN deve ter no máximo 60 caracteres.').optional(),
-  cddOrCdu: z.string().max(60, 'O campo CDD ou CDU deve ter no máximo 60 caracteres.').optional(),
-  tombo: z.string().max(60, 'O campo Tombo deve ter no máximo 60 caracteres.').optional(),
+  cddOrCdu: z.string().max(60, 'O campo CDD ou CDU deve ter no máximo 60 caracteres.').optional().nullable(),
+  tombo: z.string().max(60, 'O campo Tombo deve ter no máximo 60 caracteres.').optional().nullable(),
   edition: z.string().max(50, 'A Edição deve ter no máximo 50 caracteres.').optional(),
 });
 

@@ -1,18 +1,27 @@
-import Icon from "@/components/ui/icon";
-import { ItemGroup } from "@/components/ui/item";
-import CardStatsSection from "./components/cards-section";
-import { CloseLoansTable } from "./components/close-loans-table";
-import { UnavailableBooksTable } from "./components/unavailable-books-table";
+import { Button } from '@/components/ui/button';
+import Icon from '@/components/ui/icon';
+import { ItemGroup } from '@/components/ui/item';
+import CardStatsSection from './components/cards-section';
+import { CloseLoansTable } from './components/close-loans-table';
+import { UnavailableBooksTable } from './components/unavailable-books-table';
+import { Separator } from '@/components/ui/separator';
+import Image from 'next/image';
+
 
 export default function DashboardPage() {
   return (
-    <div className=" p-4 pt-10 flex flex-col justify-center items-center w-full ">
+    <div className=" p-8 flex flex-col justify-center items-center w-full ">
       <div className=" w-4/5 flex flex-col justify-center ">
-        <div className=" text-green-950  flex items-center space-x-2 ">
-          <Icon name="layoutDashboard" className=" size-6 " />
-          <h1 className=" text-2xl font-medium ">Painel de controle</h1>
+        <div className=" flex items-center space-x-2 ">
+          <Button size={'icon-lg'}>
+            <Icon name="layoutDashboard" className=" size-6 " />
+          </Button>
+          <div>
+            <h1 className=" text-2xl font-medium ">Painel de controle</h1>
+            <span className=" text-sm text-muted-foreground mb-5 ">Visão geral do gerenciamento da biblioteca</span>
+          </div>
         </div>
-        <span className=" text-green-700 mb-5 ">Visão geral do gerenciamento da biblioteca</span>
+        <Separator className=' my-4 ' />
         <CardStatsSection />
         <ItemGroup className=" flex flex-col  mt-10 gap-4 ">
           <CloseLoansTable />

@@ -1,7 +1,7 @@
-import type { IconName } from "@/components/ui/icon";
+import { JSX } from "react";
 
 export interface SidebarItem {
   title: string;
-  icon: IconName;
+  icon: JSX.Element;
   url: string;
 }

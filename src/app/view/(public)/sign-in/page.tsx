@@ -7,13 +7,14 @@ import { Spinner } from '@/components/ui/spinner';
 import { authClient } from '@/lib/auth-client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { BetterAuthError, User } from 'better-auth';
+import { APIError, User } from 'better-auth';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { authUserSchema, type AuthUser } from './auth.schema';
+
 
 export default function LogInPage() {
   const [showPass, setShowPass] = useState<boolean>();
@@ -28,21 +29,29 @@ export default function LogInPage() {
     resolver: zodResolver(authUserSchema),
   });
 
-  const { mutate: mutateAuthUser, isPending: pendingAuthentication } = useMutation<User, BetterAuthError, AuthUser>({
+  const { mutate: mutateAuthUser, isPending: pendingAuthentication } = useMutation<
+    User,
+    APIError & { code: string },
+    AuthUser
+  >({
     mutationKey: ['auth-user'],
     mutationFn: async (signInData: AuthUser) => {
       const { data, error } = await authClient.signIn.email({ ...signInData });
 
-      if (error) throw new Error('Não foi possível realizar a autenticação.');
+      if (error) throw error;
 
       return data.user;
     },
     onSuccess: (data) => {
       router.replace('/view/dashboard');
-      toast.success(`Bem vindo(a), novamente ${data.name}`);
+      const name = data.name.split(' ');
+      toast.success(`Bem vindo(a), novamente ${name[0]} ${name[1]}`);
     },
-    onError: () => {
-      toast.error('Não foi possível realizar a autenticação.');
+    onError: (error: any) => {
+      console.log(error.code);
+      toast.error('Não foi possível realizar a autenticação.', {
+        description: error.code == 'INVALID_EMAIL_OR_PASSWORD' ? 'Senha ou email incorretos.' : undefined,
+      });
     },
   });
 
@@ -72,6 +81,7 @@ export default function LogInPage() {
                 </FormItem>
               )}
             />
+
             <FormField
               control={authForm.control}
               name="password"

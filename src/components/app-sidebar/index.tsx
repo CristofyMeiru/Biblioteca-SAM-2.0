@@ -7,6 +7,7 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
+  SidebarSeparator,
   useSidebar,
 } from '@/components/ui/sidebar';
 
@@ -38,10 +39,12 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-
+            
       <SidebarContent className=" text-green-950 dark:text-green-50  ">
         <PrimaryMenuSidebar />
+        <SidebarSeparator/>
         <ActionsSidebar />
+        
       </SidebarContent>
 
       <SidebarFooter>
