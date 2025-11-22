@@ -1,12 +1,10 @@
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import { ItemGroup } from '@/components/ui/item';
+import { Separator } from '@/components/ui/separator';
 import CardStatsSection from './components/cards-section';
 import { CloseLoansTable } from './components/close-loans-table';
 import { UnavailableBooksTable } from './components/unavailable-books-table';
-import { Separator } from '@/components/ui/separator';
-import Image from 'next/image';
-
 
 export default function DashboardPage() {
   return (
@@ -21,7 +19,7 @@ export default function DashboardPage() {
             <span className=" text-sm text-muted-foreground mb-5 ">Visão geral do gerenciamento da biblioteca</span>
           </div>
         </div>
-        <Separator className=' my-4 ' />
+        <Separator className=" my-4 " />
         <CardStatsSection />
         <ItemGroup className=" flex flex-col  mt-10 gap-4 ">
           <CloseLoansTable />

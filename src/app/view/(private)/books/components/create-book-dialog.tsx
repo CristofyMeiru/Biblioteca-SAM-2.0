@@ -75,7 +75,7 @@ export default function CreateBookDialog() {
     },
   });
 
-  function handleOpenChange(value: boolean) {
+  function handleOpenChange() {
     const params = new URLSearchParams(searchParams.toString());
     if (!isOpen) {
       params.set('dialog', 'new-book');
@@ -289,7 +289,7 @@ export default function CreateBookDialog() {
                   <FormItem className="flex-1">
                     <FormLabel>Tombo</FormLabel>
                     <FormControl>
-                      <Input placeholder="Tombo do livro" {...field} />
+                      <Input placeholder="Tombo do livro" {...field} value={field.value || ''} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -304,7 +304,7 @@ export default function CreateBookDialog() {
                 <FormItem className="flex-1">
                   <FormLabel>CDD ou CDU</FormLabel>
                   <FormControl>
-                    <Input placeholder="CDD ou CDU do livro" {...field} />
+                    <Input placeholder="CDD ou CDU do livro" {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -229,7 +229,7 @@ export function DataTablePagination() {
 
       router.replace(`${pathname}?${params.toString()}`);
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     setPageIndex(Number(searchParams.get('page')));

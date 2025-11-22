@@ -16,7 +16,6 @@ import { Separator } from '@/components/ui/separator';
 import apiClient from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { booksTableColumns } from './components/book-table-columns';
 import CreateBookDialog from './components/create-book-dialog';
 
@@ -44,11 +43,7 @@ export default function BooksPage() {
   const page = Number(pageParam);
   const limit = Number(limitParam);
 
-
-  const {
-    data: booksData,
-    isLoading: loadingBooks,
-  } = useQuery<BookSelectDTO[]>({
+  const { data: booksData, isLoading: loadingBooks } = useQuery<BookSelectDTO[]>({
     queryKey: ['books', { search, page, limit }],
     queryFn: async () => {
       const result = await apiClient.get<BookSelectDTO[]>('/books', {
@@ -111,7 +106,6 @@ export default function BooksPage() {
     console.log('Sucedido:', successInsertCount);
     console.log('Falhou:', failInsertCount);
   }
-
 
   return (
     <main className=" p-8 ">
