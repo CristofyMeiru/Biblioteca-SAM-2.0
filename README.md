@@ -93,11 +93,11 @@ yarn dev
 Acesse o sistema em seu navegador: http://localhost:3000
 
 ---
-## 📄 Estrutura de Pastas
+## **📄 Estrutura de Pastas**
 
 O projeto segue a convenção do **App Router** do **Next.js**:
 
-.
+```
 ├── app/                  # Rotas, layouts e páginas (SSR/RSC)
 │   ├── api/              # API Routes (Endpoints REST)
 │   └── view/             # VIEW Routes (Ex: Rotas do frontend)
@@ -107,4 +107,6 @@ O projeto segue a convenção do **App Router** do **Next.js**:
 │   └── ui/               # Componentes Shadcn/ui customizados e reaproveitaveis 
 ├── lib/                  # Funções utilitárias e abstrações de serviços (DB, Auth)
 ├── public/               # Assets estáticos (imagens, ícones)
-└── providers             # Provedores de contexto da aplicação
+├── providers             # Provedores de contexto da aplicação
+└── config                # Arquivos de configuração da infraestrutura
+    └── db                # Setup do banco de dados
