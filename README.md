@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+📚 Biblioteca - SAM (Sistema de Acervo e Monitoramento)
 
-## Getting Started
+O Biblioteca - SAM é uma plataforma monolítica e robusta para o gerenciamento de acervo, usuários e processos de empréstimo/devolução de uma biblioteca acadêmica ou institucional.
 
-First, run the development server:
+Utilizando o poder do Next.js 14, garantimos uma aplicação de alto desempenho, acessível e com uma experiência de usuário fluida.
 
-```bash
+🚀 Tecnologias
+
+Este projeto foi construído sobre uma arquitetura moderna e coesa:
+
+Next.js 14 (App Router): Core do sistema, provendo estrutura monolítica (Frontend + Backend), Server-Side Rendering (SSR) e React Server Components (RSC) para máxima performance.
+
+TypeScript: Linguagem principal para desenvolvimento, garantindo segurança e escalabilidade através da tipagem estrita.
+
+Shadcn/ui: Biblioteca de componentes de UI minimalistas e acessíveis, customizáveis e integrados perfeitamente com o Tailwind CSS.
+
+Tailwind CSS: Framework utilitário para estilização rápida e responsiva.
+
+ORM (Ex: Prisma / Drizzle): (Inserir a ORM utilizada) para comunicação eficiente e tipada com o banco de dados.
+
+🏛️ Arquitetura (Monolito SSR)
+
+Adotamos a estratégia Monolítica Next.js para simplificar o ciclo de desenvolvimento e deployment, mantendo a responsabilidade do Frontend e Backend no mesmo repositório e aplicação.
+
+O uso intensivo de Server Components permite que a lógica de acesso a dados e de negócio mais crítica seja executada exclusivamente no servidor, reduzindo a carga de trabalho do cliente e melhorando a segurança e o desempenho de ponta a ponta, um conceito essencial em sistemas modernos de gestão.
+
+🛠️ Instalação e Configuração
+
+Siga os passos abaixo para ter uma cópia de desenvolvimento rodando em sua máquina local.
+
+Pré-requisitos
+
+Certifique-se de ter as seguintes ferramentas instaladas:
+
+Node.js (v18.x ou superior)
+
+npm (ou yarn/pnpm)
+
+Git
+
+Banco de Dados (PostgreSQL/MySQL, etc.)
+
+1. Clonar o Repositório
+
+git clone [https://github.com/seu-usuario/seu-repo.git](https://github.com/seu-usuario/seu-repo.git)
+cd Biblioteca-SAM
+
+
+2. Instalar as Dependências
+
+npm install
+# ou
+yarn install
+
+
+3. Configurar Variáveis de Ambiente
+
+Crie um arquivo .env.local na raiz do projeto e preencha as variáveis necessárias para a conexão com o banco de dados e outros serviços.
+
+# URL de conexão com o Banco de Dados (ex: Prisma)
+DATABASE_URL="mysql://user:password@host:port/database"
+
+# Variáveis do NextAuth (se for usar autenticação)
+AUTH_SECRET="SEGREDO_FORTE_AQUI"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+
+
+4. Setup do Banco de Dados (Exemplo com Prisma)
+
+Se estiver utilizando um ORM como o Prisma:
+
+# Aplica as migrações no banco de dados
+npx prisma migrate dev --name init
+
+# Gera o cliente Prisma tipado
+npx prisma generate
+
+
+🏃 Executando o Projeto
+
+Para iniciar o servidor de desenvolvimento:
+
 npm run dev
-# or
+# ou
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Acesse o sistema em seu navegador: http://localhost:3000
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+📄 Estrutura de Pastas
 
-## Learn More
+O projeto segue a convenção do App Router do Next.js:
 
-To learn more about Next.js, take a look at the following resources:
+.
+├── app/                  # Rotas, layouts e páginas (SSR/RSC)
+│   ├── api/              # API Routes (Endpoints REST)
+│   └── (dashboard)/      # Grupos de rotas (Ex: Área Administrativa)
+├── components/           # Componentes React da aplicação
+│   └── ui/               # Componentes Shadcn/ui customizados
+├── lib/                  # Funções utilitárias e abstrações de serviços (DB, Auth)
+└── public/               # Assets estáticos (imagens, ícones)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+🤝 Contribuição
 
-## Deploy on Vercel
+Gostaríamos muito de contar com sua contribuição!
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Faça o fork do projeto.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Crie sua branch de recurso (git checkout -b feature/AmazingFeature).
+
+Faça o commit das suas alterações (git commit -m 'Add some AmazingFeature').
+
+Faça o push para a branch (git push origin feature/AmazingFeature).
+
+Abra um Pull Request.
