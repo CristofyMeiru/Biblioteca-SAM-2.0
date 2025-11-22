@@ -1,5 +1,7 @@
 import type { SidebarItem } from '@/types/Item-sidebar';
 import Link from 'next/link';
+import PlusGraduationCap from '../svg/plus-graduation-cap';
+import PlusHandshake from '../svg/plus-handshake';
 import Icon from '../ui/icon';
 import {
   SidebarGroup,
@@ -13,7 +15,7 @@ import {
 const items: SidebarItem[] = [
   {
     title: 'Novo emprestimo',
-    icon: <Icon name="plus" className=" size-5 " />,
+    icon: <PlusHandshake className=" size-5 " />,
     url: '/view/book-loans/new',
   },
   {
@@ -28,7 +30,7 @@ const items: SidebarItem[] = [
   },
   {
     title: 'Novo curso / turma',
-    icon: <Icon name="plus" className="size-5" />,
+    icon: <PlusGraduationCap />,
     url: '/view/courses?dialog=new-course',
   },
 ];

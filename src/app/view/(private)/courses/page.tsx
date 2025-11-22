@@ -24,7 +24,7 @@ export default function CoursesPage() {
 
   const [searchString, setSearchString] = useState<string | null>(null);
 
-  const { data: coursesData, isFetching: loadingCoursesData } = useQuery<CourseSelectDTO[]>({
+  const { data: coursesData, isLoading: loadingCoursesData } = useQuery<CourseSelectDTO[]>({
     queryKey: ['courses', searchString],
     queryFn: async () => {
       const response = await apiClient.get<CourseSelectDTO[]>('/courses', { params: { search: searchString ?? null } });

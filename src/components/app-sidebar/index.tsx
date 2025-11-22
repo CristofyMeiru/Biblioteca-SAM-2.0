@@ -39,12 +39,14 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-            
       <SidebarContent className=" text-green-950 dark:text-green-50  ">
+        <SidebarSeparator />
+
         <PrimaryMenuSidebar />
-        <SidebarSeparator/>
+
+        <SidebarSeparator />
+
         <ActionsSidebar />
-        
       </SidebarContent>
 
       <SidebarFooter>
