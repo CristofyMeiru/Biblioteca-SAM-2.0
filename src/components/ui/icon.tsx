@@ -67,6 +67,8 @@ export const icons = {
   moreHorizontal: lucide.MoreHorizontal,
   userPlus: lucide.UserPlus,
   bookPlus: lucide.BookPlus,
+  barChart2: lucide.BarChart2,
+  package: lucide.Package,
 } as const;
 
 export type IconName = keyof typeof icons;

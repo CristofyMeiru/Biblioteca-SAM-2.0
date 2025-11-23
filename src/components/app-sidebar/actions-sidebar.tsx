@@ -16,7 +16,7 @@ const items: SidebarItem[] = [
   {
     title: 'Novo emprestimo',
     icon: <PlusHandshake className=" size-5 " />,
-    url: '/view/book-loans/new',
+    url: '/view/book-loans?dialog=new-loan',
   },
   {
     title: 'Novo livro',

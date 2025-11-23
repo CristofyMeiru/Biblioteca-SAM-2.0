@@ -57,6 +57,21 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
     return null;
   }
 
+  function handleDownloadQrCode() {
+    const svg = document.getElementById('book-qrcode');
+    if (svg) {
+      const svgData = new XMLSerializer().serializeToString(svg);
+      const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `qrcode-${bookData?.title}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  }
+
   if (bookData)
     return (
       <main className=" p-8 space-y-4  ">
@@ -105,7 +120,8 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
                     side="left"
                   >
                     <span className=" text-sm ">
-                      As informações contidas no qrcode são <b>Título</b>, <b>Nome do Autor</b> e <b>Gênero</b>
+                      As informações contidas no qrcode são <b>Id</b>, <b>Título</b>, <b>Nome do Autor</b> e{' '}
+                      <b>Gênero</b>
                     </span>
                   </TooltipContent>
                 </Tooltip>
@@ -113,12 +129,14 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
             </CardHeader>
             <CardContent className=" flex flex-1 justify-center items-center ">
               <QRCodeSVG
+                id="book-qrcode"
                 className=" size-52 "
-                value={`TITULO: ${bookData.title}\nAUTOR: ${bookData.authorName}\nGÊNERO: ${bookData.genre}`}
+                marginSize={4}
+                value={`Id: ${bookData.id}\nTitulo: ${bookData.title}\nAutor: ${bookData.authorName}\nGenero: ${bookData.genre}`}
               />
             </CardContent>
             <CardFooter>
-              <Button className=" w-full ">
+              <Button className=" w-full " onClick={handleDownloadQrCode}>
                 <Icon name="download" /> Baixar QR Code
               </Button>
             </CardFooter>

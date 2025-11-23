@@ -15,7 +15,7 @@ export default function QuantityStatsCard({ bookData }: { bookData: BookSelectDT
         
         <div className=" flex items-center space-x-2">
           <Button size={'icon-lg'} className=" disabled:opacity-100 " disabled>
-            <Icon name="qrCode" />
+            <Icon name="package" />
           </Button>
           <div>
             <CardTitle className=" text-2xl ">Disponibilidade</CardTitle>

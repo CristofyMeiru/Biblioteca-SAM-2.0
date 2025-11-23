@@ -13,6 +13,7 @@ Este projeto foi construído sobre uma arquitetura moderna e coesa:
 * **Shadcn/ui**: Biblioteca de **componentes de UI** minimalistas e acessíveis, customizáveis e integrados perfeitamente com o Tailwind CSS.
 * **Tailwind CSS**: Framework utilitário para estilização rápida e responsiva.
 * **ORM Drizzle**: para comunicação eficiente e tipada com o **banco de dados**.
+* **Zod**: Validação de pipeline e schemas de formulário
 
 ***
 

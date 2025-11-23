@@ -3,8 +3,8 @@ import { AppSidebar } from '@/components/app-sidebar';
 import HeaderDropdown from '@/components/header-dropdown/header-dropdown';
 import { buttonVariants } from '@/components/ui/button';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import { Spinner } from '@/components/ui/spinner';
 import { useAuth } from '@/providers/auth-provider';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { toast } from 'sonner';
@@ -22,8 +22,9 @@ export default function PrivateLayout({ children }: Readonly<{ children: React.R
 
   if (isLoading) {
     return (
-      <main className=" h-screen w-full flex items-center justify-center space-x-2">
-        <Spinner className=" size-8 " /> <span className=" text-lg font-medium  ">Carregando dados do usuário</span>
+      <main className=" h-screen w-full flex flex-col items-center justify-center space-x-2">
+        <Image className=' animate-bounce ' src={'/logo.png'} alt="Logo" width={100} height={100} />
+        <div  className=' w-40 h-1 border-t-2 '></div>
       </main>
     );
   }

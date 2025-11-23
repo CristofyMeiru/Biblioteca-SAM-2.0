@@ -1,0 +1,23 @@
+import z from 'zod';
+
+export const createBookLoanSchema = z.object({
+  fullname: z
+    .string()
+    .min(3, 'Nome completo deve ter no mínimo 3 caracteres')
+    .max(255, 'Nome completo deve ter no máximo 255 caracteres'),
+  rollNumber: z.coerce.number().int().positive('Matrícula deve ser um número positivo'),
+  courseId: z.string().uuid('ID do curso inválido'),
+  bookId: z.string().uuid('ID do livro inválido'),
+  dueDate: z.coerce.date('Data de devolução é obrigatória'),
+  loanDate: z.coerce.date().optional(),
+  bookTitle: z.string().optional(),
+  bookAuthor: z.string().optional(),
+  bookGenre: z.string().optional(),
+});
+
+export const getBookLoansSchemaQuery = z.object({
+  limit: z.coerce.number('Limite precisa ser um número').max(500, 'Limite máximo de 500.').optional().default(50),
+  page: z.coerce.number('Página precisa ser um número.').min(1).optional().default(1),
+  status: z.enum(['ACTIVE', 'RETURNED']).optional(),
+  search: z.string().optional(),
+});

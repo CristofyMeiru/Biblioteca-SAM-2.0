@@ -111,11 +111,14 @@ export async function deleteByid(id: string): Promise<BookSelectDTO | null> {
   }
 }
 
-export async function updateById(id: string, fields: EditBookDTO): Promise<BookSelectDTO> {
+export async function updateById(
+  id: string,
+  fields: EditBookDTO & { loanedQuantity?: number }
+): Promise<BookSelectDTO> {
   try {
     const [updateResult] = await db
       .update(booksTable)
-      .set({ ...fields })
+      .set({ ...fields, updatedAt: new Date(Date.now()) })
       .where(eq(booksTable.id, id))
       .returning();
 

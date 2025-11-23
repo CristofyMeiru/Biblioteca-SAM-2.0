@@ -1,0 +1,20 @@
+# Dom casmurro
+@book_id=38bdbddb-e182-4fb0-8cc7-b0ad813e0a58 
+# 3º DS
+@
+
+### Criar emprestimo
+POST http://localhost:3000/api/book-loans
+Content-Type: application/json
+
+{
+  "fullname": "Antonio Cristofy",
+  "rollNumber": 7,
+  "courseId": "",
+  "bookId": "",
+  "dueDate": "2025-11-24",
+  "loanDate": "2025-11-23",
+}
+
+### Busca de empréstimos
+GET http://localhost:3000/api/book-loans
