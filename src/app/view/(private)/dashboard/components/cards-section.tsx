@@ -1,34 +1,30 @@
-"use client";
+'use client';
 
-import { BookSelectDTO } from "@/app/api/books/books.dto";
-import Icon from "@/components/ui/icon";
-import { Item, ItemActions, ItemContent, ItemGroup, ItemHeader, ItemTitle } from "@/components/ui/item";
-import { Skeleton } from "@/components/ui/skeleton";
-import apiClient from "@/lib/api";
-import { useQuery } from "@tanstack/react-query";
-
-
+import { BookSelectDTO } from '@/app/api/books/books.dto';
+import Icon from '@/components/ui/icon';
+import { Item, ItemActions, ItemContent, ItemGroup, ItemHeader, ItemTitle } from '@/components/ui/item';
+import { Skeleton } from '@/components/ui/skeleton';
+import apiClient from '@/lib/api';
+import { useQuery } from '@tanstack/react-query';
 
 export default function CardStatsSection() {
-  const itemGroupClassname: string = " flex-col md:flex-row gap-4 ";
-  const itemClassname = " shadow-sm w-full lg:w-1/2 ";
+  const itemGroupClassname: string = ' flex-col md:flex-row gap-4 ';
+  const itemClassname = ' shadow-sm w-full lg:w-1/2 ';
 
   const { data: booksCountsData, isLoading: loadingBooksCount } = useQuery<{ count: number }>({
-    queryKey: ["books", "count"],
-    queryFn: async () => {
-      const response = await apiClient.get<{ count: number }>("/books/counts");
-
-      return response.data;
-    },
+    queryKey: ['books', 'count'],
+    queryFn: async () => await apiClient.get<{ count: number }>('/books/counts').then((res) => res.data),
   });
 
   const { data: unavailableBooksData, isLoading: loadingUnavailableBooks } = useQuery<BookSelectDTO[]>({
-    queryKey: ["books", "unavailable"],
-    queryFn: async () => {
-      const response = await apiClient.get<BookSelectDTO[]>("/books?status=unavailable");
+    queryKey: ['books', 'unavailable'],
+    queryFn: async () => await apiClient.get<BookSelectDTO[]>('/books?status=unavailable').then((res) => res.data),
+  });
 
-      return response.data;
-    },
+  const { data: activeBookLoansData, isLoading: loadingActiveBookLoans } = useQuery<{ total: number }>({
+    queryKey: ['book-loans', 'active'],
+    queryFn: async () =>
+      await apiClient.get<{ total: number }>('/book-loans/count?status=ACTIVE').then((res) => res.data),
   });
 
   return (
@@ -62,7 +58,13 @@ export default function CardStatsSection() {
               </ItemActions>
             </ItemHeader>
             <ItemContent>
-              <span className="font-medium text-2xl">84</span>
+              {loadingActiveBookLoans ? (
+                <Skeleton className=" h-7 w-25 " />
+              ) : activeBookLoansData ? (
+                <span className="font-medium text-2xl">{activeBookLoansData?.total}</span>
+              ) : (
+                <>N/A</>
+              )}
               <span className="text-primary">+12% desde o mês passado</span>
             </ItemContent>
           </Item>

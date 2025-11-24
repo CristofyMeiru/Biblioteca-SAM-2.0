@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
 import {
   DataTable,
+  DataTableActions,
   DataTableContent,
   DataTableHeader,
   DataTableInputSearch,
@@ -40,17 +41,19 @@ export default function BooksPage() {
   const search = searchParams.get('search') ?? null;
   const pageParam = searchParams.get('page') ?? '1';
   const limitParam = searchParams.get('limit') ?? '50';
+  const status = searchParams.get('status') ?? null; // Monitor status param
   const page = Number(pageParam);
   const limit = Number(limitParam);
 
   const { data: booksData, isLoading: loadingBooks } = useQuery<BookSelectDTO[]>({
-    queryKey: ['books', { search, page, limit }],
+    queryKey: ['books', { search, page, limit, status }], // Add status to queryKey
     queryFn: async () => {
       const result = await apiClient.get<BookSelectDTO[]>('/books', {
         params: {
           limit,
           page,
           search,
+          status, // Pass status to API
         },
       });
 
@@ -127,7 +130,18 @@ export default function BooksPage() {
       <section className=" flex flex-col space-y-2">
         <DataTable name="books" columns={booksTableColumns} data={booksData ?? []} isLoading={loadingBooks}>
           <DataTableHeader>
-            <DataTableInputSearch />
+            <div className="flex items-center justify-between w-full">
+              <DataTableInputSearch />
+              <DataTableActions
+                filters={[
+                  {
+                    key: 'status',
+                    title: 'Status',
+                    options: [{ label: 'Indisponíveis', value: 'unavailable' }],
+                  },
+                ]}
+              />
+            </div>
           </DataTableHeader>
           <DataTableContent />
           <DataTablePagination />

@@ -1,7 +1,7 @@
 import { convertQrCodeDataToJson, startCamera } from '@/common/utils/stream.utils';
 import { BookQrCodeData, StudentQrCodeData } from '@/types/qr-code-data';
 import jsQR from 'jsqr';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useBookLoansPageContext } from './context';
 
 export default function DialogQrcodeReader() {
@@ -10,12 +10,21 @@ export default function DialogQrcodeReader() {
   const { setStudentData, readerState, setReaderState, setBookData } = useBookLoansPageContext();
 
   const lastScanTime = useRef<number>(0);
+  const animationFrameId = useRef<number | null>(null);
 
-  const scanLoop = () => {
+  const isStudentQrCode = useCallback((data: any): data is StudentQrCodeData => {
+    return 'Nome' in data && 'Série' in data && 'Curso' in data && 'Número da Chamada' in data;
+  }, []);
+
+  const isBookQrCode = useCallback((data: any): data is BookQrCodeData => {
+    return 'Id' in data && 'Titulo' in data && 'Autor' in data && 'Genero' in data;
+  }, []);
+
+  const scanLoop = useCallback(() => {
     if (videoRef.current && canvasRef.current && videoRef.current.readyState === videoRef.current.HAVE_ENOUGH_DATA) {
       const now = Date.now();
       if (now - lastScanTime.current < 500) {
-        requestAnimationFrame(scanLoop);
+        animationFrameId.current = requestAnimationFrame(scanLoop);
         return;
       }
 
@@ -35,11 +44,11 @@ export default function DialogQrcodeReader() {
           inversionAttempts: 'dontInvert',
         });
 
-        console.log('Ta lendo');
-
         if (code) {
           try {
             const parsedData = convertQrCodeDataToJson<any>(code.data);
+
+            console.log(parsedData)
 
             if (readerState === 'student' && isStudentQrCode(parsedData)) {
               setStudentData(parsedData);
@@ -53,23 +62,15 @@ export default function DialogQrcodeReader() {
         }
       }
     }
-    requestAnimationFrame(scanLoop);
-  };
+    animationFrameId.current = requestAnimationFrame(scanLoop);
+  }, [readerState, setStudentData, setReaderState, setBookData, isStudentQrCode, isBookQrCode]); // Dependencies for useCallback
 
-  function isStudentQrCode(data: any): data is StudentQrCodeData {
-    return 'Nome' in data && 'Série' in data && 'Curso' in data && 'Número da Chamada' in data;
-  }
-
-  function isBookQrCode(data: any): data is BookQrCodeData {
-    return 'Id' in data && 'Titulo' in data && 'Autor' in data && 'Genero' in data;
-  }
-
-  async function start() {
+  async function startCameraAndScan() {
     if (videoRef.current) {
       try {
         videoRef.current.srcObject = await startCamera();
         await videoRef.current.play();
-        requestAnimationFrame(scanLoop);
+        animationFrameId.current = requestAnimationFrame(scanLoop);
       } catch (error) {
         console.error('Error starting video stream:', error);
       }
@@ -77,15 +78,18 @@ export default function DialogQrcodeReader() {
   }
 
   useEffect(() => {
-    start();
+    startCameraAndScan();
 
     return () => {
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
       if (videoRef.current && videoRef.current.srcObject) {
         const stream = videoRef.current.srcObject as MediaStream;
         stream.getTracks().forEach((track) => track.stop());
       }
     };
-  }, []);
+  }, [scanLoop]);
 
   return (
     <div className="relative size-120 bg-black rounded-md overflow-hidden">

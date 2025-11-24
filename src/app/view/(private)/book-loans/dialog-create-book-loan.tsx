@@ -1,3 +1,5 @@
+import { BookLoansCreateDTO } from '@/app/api/book-loans/book-loans.dto';
+import { AppError } from '@/common/resolvers/app-error';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -10,8 +12,12 @@ import {
 } from '@/components/ui/dialog';
 import Icon from '@/components/ui/icon';
 import { Separator } from '@/components/ui/separator';
+import { Spinner } from '@/components/ui/spinner';
+import apiClient from '@/lib/api';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import AlertStudentValidator from './alert-student-validator';
 import { defaultValuesCreateBookLoan, useBookLoansPageContext } from './context';
 import DialogCreateBookLoanForm from './dialog-create-book-loan-form';
@@ -22,9 +28,31 @@ export default function CreateBookLoansDialog() {
   const router = useRouter();
   const pathname = usePathname();
 
+  const queryClient = useQueryClient();
+
   const { setBookData, setReaderState, setStudentData, formCreateBookLoan } = useBookLoansPageContext();
 
   const [open, setOpen] = useState<boolean>(false);
+
+  const { mutate: mutateNewBookLoan, isPending: pendingNewBookLoan } = useMutation<
+    unknown,
+    AppError,
+    BookLoansCreateDTO
+  >({
+    mutationKey: ['new-book-loan'],
+    mutationFn: async (data) => {
+      const response = await apiClient.post('/book-loans', data);
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success('Empréstimo criado com sucesso');
+      handleRestart();
+      queryClient.invalidateQueries({ queryKey: ['book-loans'] });
+    },
+    onError: (error) => {
+      toast.error('Erro ao criar empréstimo', { description: error.message });
+    },
+  });
 
   function handleOpenChange(openValue: boolean) {
     const params = new URLSearchParams(searchParams.toString());
@@ -45,7 +73,7 @@ export default function CreateBookLoansDialog() {
   }
 
   function handleRestart() {
-    formCreateBookLoan.reset();
+    formCreateBookLoan.reset(defaultValuesCreateBookLoan);
     setBookData(null);
     setStudentData(null);
     setReaderState('student');
@@ -84,11 +112,21 @@ export default function CreateBookLoansDialog() {
           <AlertStudentValidator />
 
           <div className="flex gap-2">
-            <Button onClick={handleRestart} variant={'outline'}>
+            <Button onClick={handleRestart} variant={'outline'} disabled={pendingNewBookLoan}>
               <Icon name="rotateCcw" /> Restaurar
             </Button>
-            <Button type="submit">
-              <Icon name="handshake" /> Emprestar
+            <Button
+              onClick={formCreateBookLoan.handleSubmit((data) => mutateNewBookLoan(data))}
+              type="submit"
+              disabled={pendingNewBookLoan}
+            >
+              {pendingNewBookLoan ? (
+                <Spinner />
+              ) : (
+                <>
+                  <Icon name="handshake" /> Emprestar
+                </>
+              )}
             </Button>
           </div>
         </DialogFooter>

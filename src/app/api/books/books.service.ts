@@ -1,6 +1,5 @@
 import { AppError, ErrorType } from '@/common/resolvers/app-error';
-import { BookParamsDTO, EditBookDTO } from './books.dto';
-import { BookInsertDTO, BookSelectDTO, CreateBookDTO, GetBooksDTO } from './books.dto';
+import { BookInsertDTO, BookParamsDTO, BookSelectDTO, CreateBookDTO, EditBookDTO, GetBooksDTO } from './books.dto';
 import * as booksRepository from './books.repository';
 
 export async function get(options: GetBooksDTO): Promise<BookSelectDTO[]> {
@@ -11,7 +10,7 @@ export async function get(options: GetBooksDTO): Promise<BookSelectDTO[]> {
     if (search) {
       return await booksRepository.search(search, { limit, offset });
     } else if (status === 'unavailable') {
-      return await booksRepository.unavailableBooks();
+      return await booksRepository.unavailableBooks({ limit, offset });
     }
 
     return await booksRepository.find({}, { limit, offset });

@@ -100,10 +100,66 @@ export function DataTableInputSearch() {
 
   return (
     <div className="relative w-1/3">
-      <Input placeholder="Pesquisar..." className="pr-12" onChange={(e) => setValue(e.target.value)} value={value} />
+      <Input placeholder="Pesquisar..." className=" bg-white pr-12" onChange={(e) => setValue(e.target.value)} value={value} />
       <Button variant="ghost" size="icon" className="absolute right-0 top-1/2 -translate-y-1/2">
         <Icon name="search" />
       </Button>
+    </div>
+  );
+}
+
+export type FilterOption = {
+  label: string;
+  value: string;
+};
+
+export type FilterConfig = {
+  key: string;
+  title: string;
+  options: FilterOption[];
+};
+
+export function DataTableActions({ filters }: { filters: FilterConfig[] }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  function handleFilterChange(key: string, value: string) {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (value === 'all') {
+      params.delete(key);
+    } else {
+      params.set(key, value);
+    }
+
+    // Reset page to 1 when filter changes
+    params.set('page', '1');
+
+    router.replace(`${pathname}?${params.toString()}`);
+  }
+
+  return (
+    <div className="flex items-center space-x-2">
+      {filters.map((filter) => (
+        <Select
+          key={filter.key}
+          defaultValue={searchParams.get(filter.key) ?? 'all'}
+          onValueChange={(value) => handleFilterChange(filter.key, value)}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder={filter.title} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos</SelectItem>
+            {filter.options.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      ))}
     </div>
   );
 }

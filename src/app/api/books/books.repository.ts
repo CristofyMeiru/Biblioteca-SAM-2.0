@@ -169,9 +169,17 @@ export async function count(fields: Partial<Omit<BookSelectDTO, 'createdAt' | 'u
   }
 }
 
-export async function unavailableBooks(): Promise<BookSelectDTO[]> {
+export async function unavailableBooks(options: { offset?: number; limit?: number } = {}): Promise<BookSelectDTO[]> {
   try {
-    const result = await db.select().from(booksTable).where(eq(booksTable.quantity, booksTable.loanedQuantity));
+    const offset = options.offset ?? 0;
+    const limit = options.limit ?? 20;
+
+    const result = await db
+      .select()
+      .from(booksTable)
+      .where(eq(booksTable.quantity, booksTable.loanedQuantity))
+      .limit(limit)
+      .offset(offset);
 
     return result;
   } catch (error) {

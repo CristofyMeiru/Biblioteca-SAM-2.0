@@ -11,7 +11,9 @@ export const booksTableColumns: ColumnDef<BookSelectDTO>[] = [
     header: 'Título',
     cell: ({ row }) => (
       <Link href={`/view/books/${String(row.original.id)}`}>
-        <Button className=' text-accent-foreground !p-0 h-fit ' variant={"link"}>{capitalCase(String(row.getValue('title')))}</Button>
+        <Button className=" text-accent-foreground !p-0 h-fit " variant={'link'}>
+          {capitalCase(String(row.getValue('title')))}
+        </Button>
       </Link>
     ),
   },
@@ -59,9 +61,19 @@ export const booksTableColumns: ColumnDef<BookSelectDTO>[] = [
     cell: ({ row }) => {
       const { quantity, loanedQuantity } = row.original;
 
+      const availableQuantity = quantity - loanedQuantity;
+      const mediumQuantity = quantity / 2;
+
+      const className =
+        availableQuantity === 0
+          ? ' text-white bg-red-400 '
+          : availableQuantity > mediumQuantity
+          ? 'text-green-800 dark:text-white bg-primary/20'
+          : ' bg-yellow-400 dark:text-white text-white ';
+
       return (
         <div className=" w-full flex items-center justify-center ">
-          <Kbd className=" bg-primary/20 text-green-800 dark:text-green-300 ">{quantity - loanedQuantity}</Kbd>
+          <Kbd className={className}>{availableQuantity}</Kbd>
         </div>
       );
     },

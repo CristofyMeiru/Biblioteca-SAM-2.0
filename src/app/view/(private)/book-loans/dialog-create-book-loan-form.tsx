@@ -10,10 +10,11 @@ import apiClient from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 import { capitalCase } from 'change-case';
 import { useEffect } from 'react';
+import { useWatch } from 'react-hook-form';
 import { useBookLoansPageContext } from './context';
 
 export default function DialogCreateBookLoanForm() {
-  const { studentData, formCreateBookLoan, bookData } = useBookLoansPageContext();
+  const { studentData, formCreateBookLoan, bookData, setBookData } = useBookLoansPageContext();
 
   const { data: coursesData, isLoading: loadingCourses } = useQuery({
     queryKey: ['courses'],
@@ -23,18 +24,52 @@ export default function DialogCreateBookLoanForm() {
         .then((res) => res.data.sort((a, b) => Number(a.gradeLevel) - Number(b.gradeLevel))),
   });
 
+  const courseId = useWatch({
+    control: formCreateBookLoan.control,
+    name: 'courseId',
+  });
+
+  const courseName = useWatch({
+    control: formCreateBookLoan.control,
+    name: 'courseName',
+  });
+
+  const { data: selectedCourse, isLoading: loadingSelectedCourse } = useQuery<CourseSelectDTO>({
+    queryKey: ['courses', { courseId }],
+    queryFn: async () => apiClient.get<CourseSelectDTO>(`/courses/${courseId}`).then((res) => res.data),
+    enabled: !!courseId,
+  });
+
   useEffect(() => {
+    console.log('ta passando no effect');
     if (studentData) {
       formCreateBookLoan.setValue('fullname', capitalCase(studentData.Nome));
       formCreateBookLoan.setValue('rollNumber', studentData['Número da Chamada']);
+      formCreateBookLoan.setValue('courseName', studentData.Curso);
+
+      if (coursesData) {
+        const [gradeLevelStr, slug] = studentData.Curso.split(' ');
+        const matchedCourse = coursesData.find(
+          (c) => c.gradeLevel === gradeLevelStr && c.slug.toLowerCase() === slug?.toLowerCase()
+        );
+
+        if (matchedCourse) {
+          formCreateBookLoan.setValue('courseId', matchedCourse.id);
+        } else {
+          formCreateBookLoan.setValue('courseId', '');
+        }
+      } else {
+        formCreateBookLoan.setValue('courseId', '');
+      }
     }
     if (bookData) {
-      formCreateBookLoan.setValue('bookTitle', bookData.Titulo);
-      formCreateBookLoan.setValue('bookAuthor', bookData.Autor);
-      formCreateBookLoan.setValue('bookGenre', bookData.Genero);
+      console.log(bookData);
+      formCreateBookLoan.setValue('bookTitle', capitalCase(bookData.Titulo));
+      formCreateBookLoan.setValue('bookAuthor', capitalCase(bookData.Autor));
+      formCreateBookLoan.setValue('bookGenre', capitalCase(bookData.Genero));
       formCreateBookLoan.setValue('bookId', bookData.Id);
     }
-  }, [studentData, formCreateBookLoan, bookData]);
+  }, [studentData, formCreateBookLoan, bookData, setBookData, coursesData]);
 
   return (
     <Form {...formCreateBookLoan}>
@@ -68,7 +103,17 @@ export default function DialogCreateBookLoanForm() {
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className=" w-full ">
-                        <SelectValue placeholder="Selecione o curso" />
+                        <SelectValue placeholder="Selecione o curso">
+                          {loadingSelectedCourse && courseId ? (
+                            <Skeleton className="w-full h-full" />
+                          ) : selectedCourse ? (
+                            `${selectedCourse.gradeLevel}º ${selectedCourse.slug} - ${capitalCase(selectedCourse.name)}`
+                          ) : courseName ? (
+                            courseName
+                          ) : (
+                            'Selecione o curso'
+                          )}
+                        </SelectValue>
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>

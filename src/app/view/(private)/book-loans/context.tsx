@@ -19,9 +19,13 @@ export const defaultValuesCreateBookLoan: BookLoansCreateDTO = {
   fullname: '',
   rollNumber: 0,
   courseId: '',
+  courseName: '',
   bookId: '',
   dueDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000), // 10 dias
   loanDate: new Date(),
+  bookTitle: '',
+  bookAuthor: '',
+  bookGenre: '',
 };
 
 export function BookLoansPageContextProvider({ children }: { children: React.ReactNode }) {

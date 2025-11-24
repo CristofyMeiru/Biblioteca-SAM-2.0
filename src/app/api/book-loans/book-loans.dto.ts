@@ -1,7 +1,7 @@
 import { bookLoans } from '@/config/db/tables/book-loans.table';
 import { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 import z from 'zod';
-import { createBookLoanSchema, getBookLoansSchemaQuery } from './book-loans.pipe';
+import { checkCredibilitySchema, createBookLoanSchema, getBookLoansSchemaQuery } from './book-loans.pipe';
 
 export type BookLoansInsertDTO = InferInsertModel<typeof bookLoans>;
 
@@ -17,3 +17,5 @@ export type BookLoansWithDetailsDTO = BookLoansSelectDTO & {
   courseGradeLevel: string;
   courseName: string;
 };
+
+export type CheckCredibilityDTO = z.infer<typeof checkCredibilitySchema>;
