@@ -7,9 +7,82 @@ import {
   BookLoansSelectDTO,
   BookLoansWithDetailsDTO,
   CheckCredibilityDTO,
+  EditBookLoanDTO,
   GetBookLoansDTO,
 } from './book-loans.dto';
 import * as bookLoansRepository from './book-loans.repository';
+
+export async function updateById(id: string, data: EditBookLoanDTO) {
+  try {
+    const loanExists = await bookLoansRepository.findOne({ id });
+
+    if (!loanExists) {
+      throw new AppError('Empréstimo não encontrado.', ErrorType.NOT_FOUND);
+    }
+
+    if (data.returnDate && !loanExists.returnDate) {
+      const book = await booksRepository.findOne({ id: loanExists.bookId });
+      if (book) {
+        await booksRepository.updateById(book.id, {
+          loanedQuantity: Math.max(0, book.loanedQuantity - 1),
+        });
+      }
+    }
+
+    const result = await bookLoansRepository.updateById(id, data);
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deleteById(id: string): Promise<BookLoansSelectDTO> {
+  try {
+    const loanExists = await bookLoansRepository.findOne({ id });
+
+    if (!loanExists) {
+      throw new AppError('Empréstimo não encontrado.', ErrorType.NOT_FOUND);
+    }
+
+    const book = await booksRepository.findOne({ id: loanExists.bookId });
+    if (!book) {
+      throw new AppError('Livro não encontrado.', ErrorType.NOT_FOUND);
+    }
+
+    await booksRepository.updateById(book.id, {
+      loanedQuantity: Math.max(0, book.loanedQuantity - 1),
+    });
+
+    return await bookLoansRepository.deleteById(id);
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function returnById(id: string): Promise<BookLoansSelectDTO> {
+  try {
+    const loanExists = await bookLoansRepository.findOne({ id });
+
+    if (!loanExists) {
+      throw new AppError('Emprestimo não encontrado', ErrorType.NOT_FOUND);
+    }
+
+    const bookExists = await booksRepository.findOne({ id: loanExists.bookId });
+    if (!bookExists) {
+      throw new AppError('Livro não encontrado', ErrorType.NOT_FOUND);
+    }
+
+    await booksRepository.updateById(bookExists.id, {
+      loanedQuantity: Math.max(0, bookExists.loanedQuantity - 1),
+    });
+
+    const result = await updateById(id, { returnDate: new Date() });
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
 
 export async function createBookLoan(bookLoan: BookLoansCreateDTO) {
   try {
@@ -72,7 +145,6 @@ export async function createBookLoan(bookLoan: BookLoansCreateDTO) {
       dueDate: bookLoan.dueDate,
       loanDate: bookLoan.loanDate,
       returnDate: undefined,
-      status: 'ACTIVE',
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -96,7 +168,7 @@ export async function get(options: GetBookLoansDTO): Promise<BookLoansWithDetail
 
     const filter: Partial<BookLoansSelectDTO> = {};
     if (status) {
-      filter.status = status;
+      // filter.status = status;
     }
 
     return await bookLoansRepository.find(filter, { limit, offset });
@@ -115,12 +187,26 @@ export async function count(filters: Partial<BookLoansSelectDTO> = {}): Promise<
   }
 }
 
+export async function getById(id: string): Promise<BookLoansWithDetailsDTO> {
+  try {
+    const result = await bookLoansRepository.findOneWithDetails({ id });
+
+    if (!result) {
+      throw new AppError('Empréstimo não encontrado.', ErrorType.NOT_FOUND);
+    }
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function checkCredibility(data: CheckCredibilityDTO) {
   try {
     const [gradeLevel, slug] = data.courseSlug.split(' ');
 
-    console.log(gradeLevel, slug)
-    
+    console.log(gradeLevel, slug);
+
     const courseExists = await coursesRepository.findOne({
       gradeLevel: gradeLevel as '1' | '2' | '3',
       slug,
@@ -134,7 +220,6 @@ export async function checkCredibility(data: CheckCredibilityDTO) {
       fullname: data.fullname,
       rollNumber: data.rollNumber,
       courseId: courseExists.id,
-      status: 'ACTIVE',
     });
 
     let isCredible: 'completely' | 'partially' | 'no';

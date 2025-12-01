@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
 
     const result = await bookLoansService.createBookLoan(parsedBody);
 
-    return NextResponse.json(result);
+    return NextResponse.json(result, { status: 201 });
   } catch (error) {
     return errorHandler(error);
   }

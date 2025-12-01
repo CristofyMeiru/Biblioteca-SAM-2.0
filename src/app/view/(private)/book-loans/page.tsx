@@ -4,6 +4,7 @@ import Icon from '@/components/ui/icon';
 import BookLoansTable from './book-loans-table';
 import { BookLoansPageContextProvider } from './context';
 import CreateBookLoansDialog from './dialog-create-book-loan';
+import DialogEditBookLoan from './dialog-edit-book-loan';
 
 export default function BookLoansPage() {
   return (
@@ -23,6 +24,7 @@ export default function BookLoansPage() {
         </section>
 
         <BookLoansTable />
+        <DialogEditBookLoan />
       </main>
     </BookLoansPageContextProvider>
   );

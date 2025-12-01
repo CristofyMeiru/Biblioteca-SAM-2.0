@@ -35,12 +35,12 @@ Certifique-se de ter as seguintes ferramentas instaladas:
 * **Node.js** (v18.x ou superior)
 * **npm** (ou yarn/pnpm)
 * **Git**
-* **Banco de Dados** (PostgreSQL/MySQL, etc.)
+* **Banco de Dados** (Uma conta no Neon se for usar o padrão do projeto)
 
 ### **1. Clonar o Repositório**
 
 ```bash
-git clone [https://github.com/seu-usuario/seu-repo.git](https://github.com/seu-usuario/seu-repo.git)
+git clone git@github.com:CristofyMeiru/Biblioteca-SAM-2.0.git
 
 cd Biblioteca-SAM
 ```

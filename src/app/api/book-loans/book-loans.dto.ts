@@ -16,6 +16,9 @@ export type BookLoansWithDetailsDTO = BookLoansSelectDTO & {
   bookAuthor: string;
   courseGradeLevel: string;
   courseName: string;
+  status: 'ACTIVE' | 'RETURNED' | 'LATE';
 };
 
 export type CheckCredibilityDTO = z.infer<typeof checkCredibilitySchema>;
+
+export type EditBookLoanDTO = Partial<BookLoansInsertDTO>;

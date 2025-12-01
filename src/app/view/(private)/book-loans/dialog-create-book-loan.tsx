@@ -80,7 +80,7 @@ export default function CreateBookLoansDialog() {
   }
 
   useEffect(() => {
-    if (searchParams.get('dialog')) {
+    if (searchParams.get('dialog') == 'new-loan') {
       setOpen(true);
     } else {
       setOpen(false);

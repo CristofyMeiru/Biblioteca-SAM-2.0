@@ -4,7 +4,33 @@ import { bookLoans } from '@/config/db/tables/book-loans.table';
 import { booksTable } from '@/config/db/tables/books.tables';
 import { coursesTable } from '@/config/db/tables/courses.table';
 import { and, eq, sql } from 'drizzle-orm';
-import { BookLoansInsertDTO, BookLoansSelectDTO, BookLoansWithDetailsDTO } from './book-loans.dto';
+import { BookLoansInsertDTO, BookLoansSelectDTO, BookLoansWithDetailsDTO, EditBookLoanDTO } from './book-loans.dto';
+
+export async function updateById(id: string, data: EditBookLoanDTO): Promise<BookLoansSelectDTO> {
+  try {
+    const [result] = await db
+      .update(bookLoans)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(bookLoans.id, id))
+      .returning();
+
+    return result;
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new AppError('Não foi possível atualizar o empréstimo.', ErrorType.INTERNAL_SERVER_ERROR);
+  }
+}
+
+export async function deleteById(id: string): Promise<BookLoansSelectDTO> {
+  try {
+    const [result] = await db.delete(bookLoans).where(eq(bookLoans.id, id)).returning();
+
+    return result;
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new AppError('Não foi possível deletar o empréstimo.', ErrorType.INTERNAL_SERVER_ERROR);
+  }
+}
 
 export async function create(data: BookLoansInsertDTO): Promise<BookLoansSelectDTO> {
   try {
@@ -31,12 +57,20 @@ export async function find(
       loanDate: bookLoans.loanDate,
       dueDate: bookLoans.dueDate,
       returnDate: bookLoans.returnDate,
-      status: bookLoans.status,
     };
 
     const conditions = Object.entries(fields).flatMap(([key, value]) => {
       const column = allowedFilters[key as keyof typeof allowedFilters];
       if (column && value !== undefined) return [eq(column, value)];
+      if (key === 'status' && value) {
+        if (value === 'RETURNED') {
+          return [sql`${bookLoans.returnDate} IS NOT NULL`];
+        } else if (value === 'LATE') {
+          return [and(sql`${bookLoans.returnDate} IS NULL`, sql`${bookLoans.dueDate} < NOW()`)];
+        } else if (value === 'ACTIVE') {
+          return [and(sql`${bookLoans.returnDate} IS NULL`, sql`${bookLoans.dueDate} >= NOW()`)];
+        }
+      }
       return [];
     });
 
@@ -50,7 +84,11 @@ export async function find(
         loanDate: bookLoans.loanDate,
         dueDate: bookLoans.dueDate,
         returnDate: bookLoans.returnDate,
-        status: bookLoans.status,
+        status: sql<
+          'ACTIVE' | 'RETURNED' | 'LATE'
+        >`CASE WHEN ${bookLoans.returnDate} IS NOT NULL THEN 'RETURNED' WHEN ${bookLoans.dueDate} < NOW() THEN 'LATE' ELSE 'ACTIVE' END`.as(
+          'status'
+        ),
         createdAt: bookLoans.createdAt,
         updatedAt: bookLoans.updatedAt,
         bookTitle: booksTable.title,
@@ -86,7 +124,6 @@ export async function findOne(
       loanDate: bookLoans.loanDate,
       dueDate: bookLoans.dueDate,
       returnDate: bookLoans.returnDate,
-      status: bookLoans.status,
     };
 
     const conditions = Object.entries(fields).flatMap(([key, value]) => {
@@ -112,6 +149,66 @@ export async function findOne(
   }
 }
 
+export async function findOneWithDetails(
+  fields: Partial<Omit<BookLoansSelectDTO, 'createdAt' | 'updatedAt'>>
+): Promise<BookLoansWithDetailsDTO | null> {
+  try {
+    const allowedFilters: Partial<Record<keyof typeof bookLoans, any>> = {
+      id: bookLoans.id,
+      fullname: bookLoans.fullname,
+      rollNumber: bookLoans.rollNumber,
+      courseId: bookLoans.courseId,
+      bookId: bookLoans.bookId,
+      loanDate: bookLoans.loanDate,
+      dueDate: bookLoans.dueDate,
+      returnDate: bookLoans.returnDate,
+    };
+
+    const conditions = Object.entries(fields).flatMap(([key, value]) => {
+      const column = allowedFilters[key as keyof typeof allowedFilters];
+
+      if (column && value !== undefined) {
+        return [eq(column, value)];
+      }
+
+      return [];
+    });
+
+    const result = await db
+      .select({
+        id: bookLoans.id,
+        fullname: bookLoans.fullname,
+        rollNumber: bookLoans.rollNumber,
+        courseId: bookLoans.courseId,
+        bookId: bookLoans.bookId,
+        loanDate: bookLoans.loanDate,
+        dueDate: bookLoans.dueDate,
+        returnDate: bookLoans.returnDate,
+        status: sql<
+          'ACTIVE' | 'RETURNED' | 'LATE'
+        >`CASE WHEN ${bookLoans.returnDate} IS NOT NULL THEN 'RETURNED' WHEN ${bookLoans.dueDate} < NOW() THEN 'LATE' ELSE 'ACTIVE' END`.as(
+          'status'
+        ),
+        createdAt: bookLoans.createdAt,
+        updatedAt: bookLoans.updatedAt,
+        bookTitle: booksTable.title,
+        bookAuthor: booksTable.authorName,
+        courseGradeLevel: coursesTable.gradeLevel,
+        courseName: coursesTable.name,
+      })
+      .from(bookLoans)
+      .leftJoin(booksTable, eq(bookLoans.bookId, booksTable.id))
+      .leftJoin(coursesTable, eq(bookLoans.courseId, coursesTable.id))
+      .where(and(...conditions))
+      .then(([res]) => res as BookLoansWithDetailsDTO);
+
+    return result;
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new AppError('Não foi possível efetuar a busca.', ErrorType.INTERNAL_SERVER_ERROR);
+  }
+}
+
 export async function count(fields: Partial<BookLoansSelectDTO>): Promise<number> {
   try {
     const allowedFilters: Partial<Record<keyof typeof bookLoans, any>> = {
@@ -123,7 +220,6 @@ export async function count(fields: Partial<BookLoansSelectDTO>): Promise<number
       loanDate: bookLoans.loanDate,
       dueDate: bookLoans.dueDate,
       returnDate: bookLoans.returnDate,
-      status: bookLoans.status,
     };
 
     const conditions = Object.entries(fields).flatMap(([key, value]) => {
@@ -131,6 +227,16 @@ export async function count(fields: Partial<BookLoansSelectDTO>): Promise<number
 
       if (column && value !== undefined) {
         return [eq(column, value)];
+      }
+
+      if (key === 'status' && value) {
+        if (value === 'RETURNED') {
+          return [sql`${bookLoans.returnDate} IS NOT NULL`];
+        } else if (value === 'LATE') {
+          return [and(sql`${bookLoans.returnDate} IS NULL`, sql`${bookLoans.dueDate} < NOW()`)];
+        } else if (value === 'ACTIVE') {
+          return [and(sql`${bookLoans.returnDate} IS NULL`, sql`${bookLoans.dueDate} >= NOW()`)];
+        }
       }
 
       return [];
@@ -165,7 +271,11 @@ export async function search(
         bl.due_date AS "dueDate",
         bl.loan_date AS "loanDate",
         bl.return_date AS "returnDate",
-        bl.status,
+        CASE
+          WHEN bl.return_date IS NOT NULL THEN 'RETURNED'
+          WHEN bl.due_date < NOW() THEN 'LATE'
+          ELSE 'ACTIVE'
+        END AS status,
         bl.created_at AS "createdAt",
         bl.updated_at AS "updatedAt",
         b.title AS "bookTitle",

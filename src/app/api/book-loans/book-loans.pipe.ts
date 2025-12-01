@@ -42,3 +42,9 @@ export const getBookLoansSchemaQuery = z.object({
 export const countBookLoansSchemaQuery = getBookLoansSchemaQuery.pick({
   status: true,
 });
+
+export const editBookLoanBodySchema = createBookLoanSchema.partial();
+
+export const bookLoanParamsSchema = z.object({
+  id: z.string().uuid('ID do empréstimo inválido'),
+});
