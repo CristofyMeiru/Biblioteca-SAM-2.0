@@ -1,6 +1,6 @@
 # **📚 Biblioteca - SAM** (Sistema de Acervo e Monitoramento)
 
-O **Biblioteca - SAM** é uma **plataforma monolítica** e robusta para o **gerenciamento de acervo**, **usuários** e processos de **empréstimo/devolução** de uma biblioteca acadêmica ou institucional.
+O **Biblioteca - SAM** é uma **plataforma monolítica** e robusta para o **gerenciamento de acervo**, **usuários** e processos de **empréstimo/devolução** feito como projeto social para a biblioteca da escola **EEEP Dr. Salomão Alves de Moura**.
 
 Utilizando o poder do **Next.js 15**, garantimos uma aplicação de alto desempenho, acessível e com uma experiência de usuário fluida.
 
