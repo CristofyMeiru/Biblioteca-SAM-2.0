@@ -42,7 +42,6 @@ export default function CardStatsSection() {
             ) : (
               <>N/A</>
             )}
-            <span className="text-primary">+12% desde o mês passado</span>
           </ItemContent>
         </Item>
 
@@ -61,7 +60,6 @@ export default function CardStatsSection() {
             ) : (
               <>N/A</>
             )}
-            <span className="text-primary">+12% desde o mês passado</span>
           </ItemContent>
         </Item>
 
@@ -80,7 +78,6 @@ export default function CardStatsSection() {
             ) : (
               <>N/A</>
             )}
-            <span className="text-primary">+3% desde o mês passado</span>
           </ItemContent>
         </Item>
       </ItemGroup>
