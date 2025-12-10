@@ -46,11 +46,16 @@ export default function DialogQrcodeReader() {
 
         if (code) {
           try {
+            console.log('tá lendo');
             const parsedData = convertQrCodeDataToJson<any>(code.data);
-            if (readerState === 'student' && isStudentQrCode(parsedData)) {
+
+            console.log(parsedData);
+            console.log(isBookQrCode(parsedData));
+
+            if (isStudentQrCode(parsedData)) {
               setStudentData(parsedData);
               setReaderState('book');
-            } else if (readerState === 'book' && isBookQrCode(parsedData)) {
+            } else if (isBookQrCode(parsedData)) {
               setBookData(parsedData);
             }
           } catch (e) {
@@ -90,7 +95,7 @@ export default function DialogQrcodeReader() {
         stream.getTracks().forEach((track) => track.stop());
       }
     };
-  }, [scanLoop, startCameraAndScan]);// eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scanLoop, startCameraAndScan]); // eslint-disable-next-line react-hooks/exhaustive-deps
 
   return (
     <div className="relative size-120 bg-black rounded-md overflow-hidden">

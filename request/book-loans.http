@@ -18,3 +18,10 @@ Content-Type: application/json
 
 ### Busca de empréstimos
 GET http://localhost:3000/api/book-loans
+
+@fullname=Antonio Cristofy Meiru de Lima
+@rollNumber=8
+@courseSlug=3 DS
+### Checar credibilidade
+GET http://localhost:3000/api/book-loans/check-credibility?fullname={{fullname}}&rollNumber={{rollNumber}}&courseSlug={{courseSlug}}
+Content-Type: application/json

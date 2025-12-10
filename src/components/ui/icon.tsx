@@ -69,7 +69,9 @@ export const icons = {
   bookPlus: lucide.BookPlus,
   barChart2: lucide.BarChart2,
   package: lucide.Package,
-  alertTriangle: lucide.AlertTriangle
+  alertTriangle: lucide.AlertTriangle,
+  logOut: lucide.LogOut,
+  logIn: lucide.LogIn
 } as const;
 
 export type IconName = keyof typeof icons;

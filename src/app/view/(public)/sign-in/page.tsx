@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import Icon from '@/components/ui/icon';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
 import { authClient } from '@/lib/auth-client';
@@ -14,7 +15,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { authUserSchema, type AuthUser } from './auth.schema';
-
 
 export default function LogInPage() {
   const [showPass, setShowPass] = useState<boolean>();
@@ -105,7 +105,15 @@ export default function LogInPage() {
                 </FormItem>
               )}
             />
-            <Button className=" w-full ">{pendingAuthentication ? <Spinner /> : 'Entrar'}</Button>
+            <Button className=" w-full ">
+              {pendingAuthentication ? (
+                <Spinner />
+              ) : (
+                <>
+                  <Icon name="logIn" /> Entrar
+                </>
+              )}
+            </Button>
           </form>
         </Form>
         <div className=" flex items-baseline space-x-1 ">

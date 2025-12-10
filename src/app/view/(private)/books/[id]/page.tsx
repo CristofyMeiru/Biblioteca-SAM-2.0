@@ -131,7 +131,7 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
               <QRCodeSVG
                 id="book-qrcode"
                 className=" size-52 "
-                marginSize={6}
+                marginSize={4}
                 value={`Id: ${bookData.id}\nTitulo: ${bookData.title}\nAutor: ${bookData.authorName}\nGenero: ${bookData.genre}`}
               />
             </CardContent>

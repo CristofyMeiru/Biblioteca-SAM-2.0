@@ -1,10 +1,8 @@
 'use client';
 
 import { BookSelectDTO } from '@/app/api/books/books.dto';
-import { buttonVariants } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
-import { Item, ItemActions, ItemHeader, ItemTitle } from '@/components/ui/item';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Item, ItemHeader, ItemTitle } from '@/components/ui/item';
 import apiClient from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 import { DashboardTable } from './table';
@@ -27,7 +25,7 @@ export function UnavailableBooksTable() {
           <Icon name="alertCircle" className=" text-destructive size-7 " />
           <span className=" text-lg font-medium text-destructive ">Livros em falta</span>
         </ItemTitle>
-        <ItemActions>
+        {/* <ItemActions>
           <Tooltip>
             <TooltipTrigger className={buttonVariants({ variant: 'outline' })}>
               <Icon name="fileText" />
@@ -36,7 +34,7 @@ export function UnavailableBooksTable() {
               <span>Gerar relatório</span>
             </TooltipContent>
           </Tooltip>
-        </ItemActions>
+        </ItemActions> */}
       </ItemHeader>
       <DashboardTable
         columns={unavailableBooksColumns}

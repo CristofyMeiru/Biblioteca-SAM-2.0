@@ -63,13 +63,11 @@ export default function DialogCreateBookLoanForm() {
       }
     }
     if (bookData) {
-      console.log(bookData);
       formCreateBookLoan.setValue('bookTitle', capitalCase(bookData.Titulo));
       formCreateBookLoan.setValue('bookAuthor', capitalCase(bookData.Autor));
       formCreateBookLoan.setValue('bookGenre', capitalCase(bookData.Genero));
       formCreateBookLoan.setValue('bookId', bookData.Id);
-          console.log(bookData);
-
+      console.log(bookData);
     }
   }, [studentData, formCreateBookLoan, bookData, setBookData, coursesData]);
 
@@ -161,7 +159,7 @@ export default function DialogCreateBookLoanForm() {
               <FormItem>
                 <FormLabel>Nome do livro</FormLabel>
                 <FormControl>
-                  <Input placeholder="Nome do livro" {...field} readOnly />
+                  <Input placeholder="Nome do livro" {...field} />
                 </FormControl>
               </FormItem>
             )}
@@ -175,7 +173,7 @@ export default function DialogCreateBookLoanForm() {
                 <FormItem className=" flex-1 ">
                   <FormLabel>Nome do autor</FormLabel>
                   <FormControl>
-                    <Input placeholder="Nome do autor" {...field} readOnly />
+                    <Input placeholder="Nome do autor" {...field} />
                   </FormControl>
                 </FormItem>
               )}
@@ -187,7 +185,7 @@ export default function DialogCreateBookLoanForm() {
                 <FormItem>
                   <FormLabel>Gênero</FormLabel>
                   <FormControl>
-                    <Input placeholder="Gênero" {...field} readOnly />
+                    <Input placeholder="Gênero" {...field} />
                   </FormControl>
                 </FormItem>
               )}

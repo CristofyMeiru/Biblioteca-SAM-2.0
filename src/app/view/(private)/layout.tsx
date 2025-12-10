@@ -1,8 +1,10 @@
 'use client';
-import { AppSidebar } from '@/components/sidebar/sidebar.view';
 import HeaderDropdown from '@/components/header-dropdown/header-dropdown';
+import { AppSidebar } from '@/components/sidebar/sidebar.view';
 import { buttonVariants } from '@/components/ui/button';
+import { Kbd } from '@/components/ui/kbd';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useAuth } from '@/providers/auth-provider';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -23,8 +25,8 @@ export default function PrivateLayout({ children }: Readonly<{ children: React.R
   if (isLoading) {
     return (
       <main className=" h-screen w-full flex flex-col items-center justify-center space-x-2">
-        <Image className=' animate-bounce ' src={'/logo.png'} alt="Logo" width={100} height={100} />
-        <div  className=' w-40 h-1 border-t-2 '></div>
+        <Image className=" animate-bounce " src={'/logo.png'} alt="Logo" width={100} height={100} />
+        <div className=" w-40 h-1 border-t-2 "></div>
       </main>
     );
   }
@@ -36,7 +38,14 @@ export default function PrivateLayout({ children }: Readonly<{ children: React.R
       <AppSidebar />
       <div className=" flex flex-col w-full min-h-screen ">
         <header className=" flex items-center justify-between bg-sidebar p-2 outline w-full ">
-          <SidebarTrigger className={`${buttonVariants({ variant: 'ghost' })} size-9`} />
+          <Tooltip>
+            <TooltipTrigger>
+              <SidebarTrigger className={`${buttonVariants({ variant: 'ghost' })} size-9`} />
+            </TooltipTrigger>
+            <TooltipContent className=" space-x-1">
+              <Kbd>Ctrl</Kbd>+<Kbd>B</Kbd>
+            </TooltipContent>
+          </Tooltip>
           <HeaderDropdown />
         </header>
         <main className=" w-full ">{children}</main>

@@ -36,7 +36,7 @@ export default function HeaderDropdown() {
         <DropdownMenuContent align="start" className=" min-w-60 w-full ">
           <DropdownMenuItem>
             <Button onClick={handleOpenSignOut} className=" w-full " size={'sm'} variant={'destructive'}>
-              <Icon name="doorOpen" className=" text-white " /> Sair
+              <Icon name="logOut" className=" text-white " /> Sair
             </Button>
           </DropdownMenuItem>
           <DropdownMenuItem>

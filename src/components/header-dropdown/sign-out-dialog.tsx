@@ -74,7 +74,7 @@ export default function SignOutDialog() {
               <Spinner />
             ) : (
               <>
-                <Icon name="doorOpen" /> Sair
+                <Icon name="logOut" /> Sair
               </>
             )}
           </AlertDialogAction>

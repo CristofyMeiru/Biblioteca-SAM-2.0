@@ -67,7 +67,7 @@ export default function BooksPage() {
   }
 
   async function adicionaTudo() {
-    const res = await fetch('/data/CORDEL-POEMA-ROMANCE_ATUALIZADO_MOD.json');
+    const res = await fetch('/data/BIOGRAFIA-MANGÁ-RELI.json');
     const data: LivroInfo[] = await res.json();
 
     const formattedData: CreateBookDTO[] = data.map((book) => ({

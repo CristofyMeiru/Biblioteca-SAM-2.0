@@ -229,7 +229,7 @@ export async function checkCredibility(data: CheckCredibilityDTO) {
       isCredible = 'completely';
     } else {
       const now = new Date();
-      const overdueLoans = loans.filter((loan) => new Date(loan.dueDate) < now);
+      const overdueLoans = loans.filter((loan) => new Date(loan.dueDate) < now && !loan.returnDate);
 
       if (overdueLoans.length === 0) {
         isCredible = 'partially';
