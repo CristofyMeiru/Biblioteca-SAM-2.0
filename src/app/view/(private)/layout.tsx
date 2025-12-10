@@ -1,5 +1,5 @@
 'use client';
-import { AppSidebar } from '@/components/app-sidebar';
+import { AppSidebar } from '@/components/sidebar/sidebar.view';
 import HeaderDropdown from '@/components/header-dropdown/header-dropdown';
 import { buttonVariants } from '@/components/ui/button';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';

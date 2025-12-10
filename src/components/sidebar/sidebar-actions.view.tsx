@@ -24,11 +24,6 @@ const items: SidebarItem[] = [
     url: '/view/books?dialog=new-book',
   },
   {
-    title: 'Nova frequência',
-    icon: <Icon name="userPlus" className="size-5" />,
-    url: '/view/attendance/new',
-  },
-  {
     title: 'Novo curso / turma',
     icon: <PlusGraduationCap />,
     url: '/view/courses?dialog=new-course',

@@ -100,7 +100,12 @@ export function DataTableInputSearch() {
 
   return (
     <div className="relative w-1/3">
-      <Input placeholder="Pesquisar..." className=" bg-white pr-12" onChange={(e) => setValue(e.target.value)} value={value} />
+      <Input
+        placeholder="Pesquisar..."
+        className=" bg-white pr-12"
+        onChange={(e) => setValue(e.target.value)}
+        value={value}
+      />
       <Button variant="ghost" size="icon" className="absolute right-0 top-1/2 -translate-y-1/2">
         <Icon name="search" />
       </Button>
@@ -296,7 +301,7 @@ export function DataTablePagination() {
       <span className="col-span-1 text-sm text-muted-foreground">{/* Exibindo {start}-{end} de {total} */}</span>
 
       <section className="flex items-center justify-center col-span-1 space-x-2">
-        <Button onClick={() => handleChangePage(1)} variant="outline">
+        <Button onClick={() => handleChangePage(1)} variant="outline" disabled={Number(searchParams.get('page')) <= 1}>
           <Icon name="chevronFirst" />
         </Button>
 
@@ -310,7 +315,11 @@ export function DataTablePagination() {
 
         <Button variant="outline">{pageIndex}</Button>
 
-        <Button onClick={() => handleChangePage(Number(searchParams.get('page')) + 1)} variant="outline">
+        <Button
+          onClick={() => handleChangePage(Number(searchParams.get('page')) + 1)}
+          variant="outline"
+          disabled={table.getRowCount() < Number(localStorage.getItem(`${name}-page-size`))}
+        >
           <Icon name="chevronRight" />
         </Button>
 

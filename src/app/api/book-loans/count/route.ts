@@ -7,11 +7,11 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
 
-    const parsedValues = pipe.countBookLoansSchemaQuery.parse(Object.fromEntries(searchParams.entries()));
+    const { status } = pipe.countBookLoansSchemaQuery.parse(Object.fromEntries(searchParams.entries()));
 
-    const result = await bookLoansService.count(parsedValues);
+    const result = await bookLoansService.count({ status });
 
-    return NextResponse.json({total: result}, { status: 200 });
+    return NextResponse.json({ total: result }, { status: 200 });
   } catch (error) {
     return errorHandler(error);
   }

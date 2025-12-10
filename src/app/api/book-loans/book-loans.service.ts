@@ -2,6 +2,7 @@ import * as booksRepository from '@/app/api/books/books.repository';
 import * as coursesRepository from '@/app/api/courses/courses.repository';
 import { AppError, ErrorType } from '@/common/resolvers/app-error';
 import {
+  BookLoansCountFilter,
   BookLoansCreateDTO,
   type BookLoansInsertDTO,
   BookLoansSelectDTO,
@@ -177,7 +178,7 @@ export async function get(options: GetBookLoansDTO): Promise<BookLoansWithDetail
   }
 }
 
-export async function count(filters: Partial<BookLoansSelectDTO> = {}): Promise<number> {
+export async function count(filters: BookLoansCountFilter = {}): Promise<number> {
   try {
     const result = await bookLoansRepository.count(filters);
 

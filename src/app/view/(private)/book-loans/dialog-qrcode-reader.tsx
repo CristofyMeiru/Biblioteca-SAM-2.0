@@ -47,9 +47,6 @@ export default function DialogQrcodeReader() {
         if (code) {
           try {
             const parsedData = convertQrCodeDataToJson<any>(code.data);
-
-            console.log(parsedData)
-
             if (readerState === 'student' && isStudentQrCode(parsedData)) {
               setStudentData(parsedData);
               setReaderState('book');
@@ -78,18 +75,22 @@ export default function DialogQrcodeReader() {
   }
 
   useEffect(() => {
+    const videoEl = videoRef.current; // snapshot
+    const animationIdEl = animationFrameId.current; // snapshot
+
     startCameraAndScan();
 
     return () => {
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
+      if (animationIdEl) {
+        cancelAnimationFrame(animationIdEl);
       }
-      if (videoRef.current && videoRef.current.srcObject) {
-        const stream = videoRef.current.srcObject as MediaStream;
+
+      if (videoEl && videoEl.srcObject) {
+        const stream = videoEl.srcObject as MediaStream;
         stream.getTracks().forEach((track) => track.stop());
       }
     };
-  }, [scanLoop]);
+  }, [scanLoop, startCameraAndScan]);// eslint-disable-next-line react-hooks/exhaustive-deps
 
   return (
     <div className="relative size-120 bg-black rounded-md overflow-hidden">

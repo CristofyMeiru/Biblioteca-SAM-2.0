@@ -35,11 +35,6 @@ const items: SidebarItem[] = [
     url: '/view/courses',
     icon: <Icon name="graduationCap" />,
   },
-  {
-    title: 'Frequência',
-    url: '/view/attendance',
-    icon: <Icon name="userCheck" />,
-  },
 ] as const;
 
 export default function PrimaryMenuSidebar() {
@@ -66,7 +61,7 @@ export default function PrimaryMenuSidebar() {
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton isActive={pathname == item.url} tooltip={item.title} asChild>
                 <Link href={item.url}>
-                  {item.icon} 
+                  {item.icon}
                   <span>{item.title}</span>
                 </Link>
               </SidebarMenuButton>

@@ -13,8 +13,8 @@ import {
 
 import Image from 'next/image';
 import SignOutDialog from '../header-dropdown/sign-out-dialog';
-import ActionsSidebar from './actions-sidebar';
-import PrimaryMenuSidebar from './primary-menu-sidebar';
+import ActionsSidebar from './sidebar-actions.view';
+import PrimaryMenuSidebar from './sidebar-mainmenu.view';
 
 export function AppSidebar() {
   const { open } = useSidebar();

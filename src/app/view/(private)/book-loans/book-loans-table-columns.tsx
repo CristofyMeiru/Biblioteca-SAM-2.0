@@ -17,21 +17,9 @@ const enumStatusLoanTranslation: Record<BookLoansWithDetailsDTO['status'], { lab
     label: 'Em andamento',
     color: 'bg-blue-500',
   },
-  CANCELED: {
-    label: 'Cancelado',
-    color: 'bg-red-500',
-  },
-  INACTIVE: {
-    label: 'Inativo',
-    color: 'bg-gray-500',
-  },
   LATE: {
     label: 'Atrasado',
     color: 'bg-orange-500',
-  },
-  LOST: {
-    label: 'Perdido',
-    color: 'bg-red-500',
   },
 };
 

@@ -22,3 +22,7 @@ export type BookLoansWithDetailsDTO = BookLoansSelectDTO & {
 export type CheckCredibilityDTO = z.infer<typeof checkCredibilitySchema>;
 
 export type EditBookLoanDTO = Partial<BookLoansInsertDTO>;
+
+export type BookLoansCountFilter = Partial<BookLoansSelectDTO> & {
+  status?: 'ACTIVE' | 'RETURNED' | 'LATE';
+};

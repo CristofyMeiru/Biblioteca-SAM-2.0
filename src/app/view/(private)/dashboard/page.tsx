@@ -3,7 +3,6 @@ import Icon from '@/components/ui/icon';
 import { ItemGroup } from '@/components/ui/item';
 import { Separator } from '@/components/ui/separator';
 import CardStatsSection from './components/cards-section';
-import { CloseLoansTable } from './components/close-loans-table';
 import { UnavailableBooksTable } from './components/unavailable-books-table';
 
 export default function DashboardPage() {
@@ -22,7 +21,7 @@ export default function DashboardPage() {
         <Separator className=" my-4 " />
         <CardStatsSection />
         <ItemGroup className=" flex flex-col  mt-10 gap-4 ">
-          <CloseLoansTable />
+          {/* <CloseLoansTable /> */}
           <UnavailableBooksTable />
         </ItemGroup>
       </div>

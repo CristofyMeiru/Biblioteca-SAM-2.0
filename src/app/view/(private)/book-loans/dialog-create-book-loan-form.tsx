@@ -68,6 +68,8 @@ export default function DialogCreateBookLoanForm() {
       formCreateBookLoan.setValue('bookAuthor', capitalCase(bookData.Autor));
       formCreateBookLoan.setValue('bookGenre', capitalCase(bookData.Genero));
       formCreateBookLoan.setValue('bookId', bookData.Id);
+          console.log(bookData);
+
     }
   }, [studentData, formCreateBookLoan, bookData, setBookData, coursesData]);
 

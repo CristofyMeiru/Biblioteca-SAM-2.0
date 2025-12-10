@@ -4,7 +4,13 @@ import { bookLoans } from '@/config/db/tables/book-loans.table';
 import { booksTable } from '@/config/db/tables/books.tables';
 import { coursesTable } from '@/config/db/tables/courses.table';
 import { and, eq, sql } from 'drizzle-orm';
-import { BookLoansInsertDTO, BookLoansSelectDTO, BookLoansWithDetailsDTO, EditBookLoanDTO } from './book-loans.dto';
+import {
+  BookLoansCountFilter,
+  BookLoansInsertDTO,
+  BookLoansSelectDTO,
+  BookLoansWithDetailsDTO,
+  EditBookLoanDTO,
+} from './book-loans.dto';
 
 export async function updateById(id: string, data: EditBookLoanDTO): Promise<BookLoansSelectDTO> {
   try {
@@ -209,7 +215,7 @@ export async function findOneWithDetails(
   }
 }
 
-export async function count(fields: Partial<BookLoansSelectDTO>): Promise<number> {
+export async function count(fields: BookLoansCountFilter): Promise<number> {
   try {
     const allowedFilters: Partial<Record<keyof typeof bookLoans, any>> = {
       id: bookLoans.id,
